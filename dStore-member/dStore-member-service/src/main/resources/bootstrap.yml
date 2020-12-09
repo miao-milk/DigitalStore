@@ -1,0 +1,19 @@
+server:
+  port: 50000
+
+spring:
+  datasource:
+    password: xxx
+    username: xxxx
+    url: jdbc:mysql://xxxx:3306/dStore_member
+  application:
+    name: dStore_member
+  cloud:
+    nacos:
+      discovery:
+        server-addr: xxxx:8848
+mybatis-plus:
+  mapper-locations: classpsth:/mapper/**/*.xml
+  global-config:
+    db-config:
+      id-type: auto

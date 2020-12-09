@@ -8,5 +8,12 @@
     <artifactId>dStore-applicationWeb</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.mxw</groupId>
+            <artifactId>dStore-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>
