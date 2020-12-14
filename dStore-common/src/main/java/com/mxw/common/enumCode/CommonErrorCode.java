@@ -10,9 +10,12 @@ public enum CommonErrorCode implements ErrorCode {
     /*****************公用异常编码***********************/
     ERROR_CODE_10001(10001,"查询参数错误"),
 
+    /*****************特殊异常异常编码***********************/
+
+    CUSTOM(99998,"自定义异常"),
     /*****************未知错误***********************/
 
-    ERROR_UNKOWN(99999,"未知错误");
+    UNKNOWN(99999,"未知错误");
 
     private int code;
     private String desc;

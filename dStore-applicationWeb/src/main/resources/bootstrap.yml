@@ -1,0 +1,50 @@
+server:
+  port: 8080
+
+#全局引用
+nacos:
+  server:
+    addr: 127.0.0.1:8848
+
+spring:
+  application:
+    name: dStore-applicationWeb
+  cloud:
+    nacos:
+      discovery: #注册中心
+        server-addr: ${nacos.server.addr}
+        namespace: 55f8d234-143c-40b9-8aaa-a1e434d3b8fd
+        cluster-name: DEFAULT  #集群模式
+      config: #配置中心
+        server-addr: ${nacos.server.addr}
+        namespace: 55f8d234-143c-40b9-8aaa-a1e434d3b8fd
+        file-extension: yaml
+        group: dStore_GROUP
+  servlet:  #SprigMvc上传文件配置
+    multipart:
+      enabled: true #默认支持文件上传
+      file-size-threshold: 0 #支持文件写入磁盘
+      location:  #上传文件的临时目录
+      max-file-size: 2MB #最大支持文件大小
+      max-request-size: 30MB #最大支持请求大小
+dubbo:
+  scan:
+    base-packages: com.mxw #dubbo 服务扫描基准包
+  protocol:
+    name: dubbo
+    port: 20891
+  registry:
+    address: nacos://127.0.0.1:8848
+  application:
+    qos:
+      port: 22310 #dubbo qos 端口配置，命令行注入
+  consumer:
+    check: false
+    timeout: 5000
+    retries: -1
+
+
+#日志配置
+logging:
+  config: classpath:log4j2.xml
+
