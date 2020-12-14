@@ -3,7 +3,7 @@ package com.mxw.member.service;
 import com.mxw.common.model.param.MemberParam;
 import com.mxw.common.model.vo.MemberVO;
 import com.mxw.common.model.vo.PageVO;
-import com.mxw.member.model.entity.ShopBuyer;
+import com.mxw.member.entity.ShopBuyer;
 
 import java.util.List;
 

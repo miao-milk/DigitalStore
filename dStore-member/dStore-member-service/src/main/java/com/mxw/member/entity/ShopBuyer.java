@@ -1,4 +1,4 @@
-package com.mxw.member.model.entity;
+package com.mxw.member.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;

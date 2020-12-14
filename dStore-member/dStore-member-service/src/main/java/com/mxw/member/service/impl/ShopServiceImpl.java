@@ -10,7 +10,7 @@ import com.mxw.common.model.vo.MemberVO;
 import com.mxw.common.model.vo.PageVO;
 import com.mxw.member.convert.ShopBuyerConvert;
 import com.mxw.member.mapper.ShopMapper;
-import com.mxw.member.model.entity.ShopBuyer;
+import com.mxw.member.entity.ShopBuyer;
 import com.mxw.member.service.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

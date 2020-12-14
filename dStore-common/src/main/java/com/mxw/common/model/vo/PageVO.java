@@ -1,5 +1,4 @@
 package com.mxw.common.model.vo;
-
 import lombok.Data;
 
 import java.io.Serializable;
