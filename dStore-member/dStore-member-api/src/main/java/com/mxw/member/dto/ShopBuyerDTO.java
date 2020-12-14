@@ -19,7 +19,6 @@ import java.math.BigDecimal;
 public class ShopBuyerDTO implements Serializable {
 
 
-
     @ApiModelProperty("卖家id")
     private Long sellerId;
 
@@ -35,10 +34,15 @@ public class ShopBuyerDTO implements Serializable {
     @ApiModelProperty("收货人的手机号码")
     private String receiverMobile;
 
+    @ApiModelProperty("人群画像类型，1:学生 2:白领 3:公务员 4:IT 5:金融族 6:居家族 7:医护人员 8:其他")
+    private Integer crowdPortraitType;
+
     @ApiModelProperty("交易次数")
     private Integer buyTotalCount;
 
     @ApiModelProperty("交易金额（购买总金额）")
     private BigDecimal buyTotalMoney;
+
+
 
 }

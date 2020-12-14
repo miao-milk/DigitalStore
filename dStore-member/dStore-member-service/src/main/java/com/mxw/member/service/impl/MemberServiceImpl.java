@@ -1,19 +1,16 @@
 package com.mxw.member.service.impl;
 
-import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.mxw.common.model.param.MemberParam;
-import com.mxw.common.model.vo.MemberVO;
+import com.mxw.common.model.entity.ShopBuyerDetail;
 import com.mxw.common.model.vo.PageVO;
 import com.mxw.member.api.MemberService;
 import com.mxw.member.convert.ShopBuyerConvert;
 import com.mxw.member.dto.ShopBuyerDTO;
 import com.mxw.member.entity.ShopBuyer;
 import com.mxw.member.mapper.ShopMapper;
-import com.mxw.member.service.ShopService;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -47,5 +44,42 @@ public class MemberServiceImpl implements MemberService {
             return new PageVO<ShopBuyerDTO>(total,current,size,memberVOList);
         }
         return new PageVO<ShopBuyerDTO>(0,current,size,new ArrayList<>());
+    }
+
+    @Override
+    public void addBlackList(String sellerId) {
+        UpdateWrapper<ShopBuyer> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("seller_id",sellerId);
+        updateWrapper.set("is_blacklist","1");
+        shopMapper.update(null, updateWrapper);
+    }
+
+    @Override
+    public ShopBuyerDetail getMemberDetailBySellerId(String sellerId) {
+        ShopBuyer shopBuyer = shopMapper.selectOne(new LambdaQueryWrapper<ShopBuyer>().eq(ShopBuyer::getSellerId, sellerId));
+        ShopBuyerDetail shopBuyerDetail = ShopBuyerConvert.INSTANCE.EntityToDetail(shopBuyer);
+        return shopBuyerDetail;
+    }
+
+    @Override
+    public void modifyMemberDetail(ShopBuyerDetail shopBuyerDetail) {
+        ShopBuyer shopBuyer = ShopBuyerConvert.INSTANCE.DetailToEntity(shopBuyerDetail);
+        shopMapper.updateById(shopBuyer);
+    }
+
+    @Override
+    public void addMemberDetail(ShopBuyerDetail shopBuyerDetail) {
+
+        ShopBuyer shopBuyer = ShopBuyerConvert.INSTANCE.DetailToEntity(shopBuyerDetail);
+        shopMapper.insert(shopBuyer);
+    }
+
+    @Override
+    public void uploadMembers(List<Object> list) {
+        for (Object o : list) {
+            ShopBuyerDetail shopBuyerDetail=(ShopBuyerDetail)o;
+            ShopBuyer shopBuyer = ShopBuyerConvert.INSTANCE.DetailToEntity(shopBuyerDetail);
+            shopMapper.insert(shopBuyer);
+        }
     }
 }
