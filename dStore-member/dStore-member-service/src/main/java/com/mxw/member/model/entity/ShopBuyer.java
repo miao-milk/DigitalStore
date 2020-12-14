@@ -1,12 +1,12 @@
-package com.mxw.common.model.entity;
+package com.mxw.member.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
-import java.math.BigDecimal;
-import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 卖家会员表
@@ -16,7 +16,7 @@ import lombok.Data;
  * @date 2020-12-10 15:00:54
  */
 @Data
-@TableName("shop_buyer_000073")
+@TableName("shop_buyer")
 public class ShopBuyer implements Serializable {
 	private static final long serialVersionUID = 3L;
 

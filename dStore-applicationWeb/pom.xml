@@ -8,6 +8,12 @@
     <artifactId>dStore-applicationWeb</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <parent>
+        <artifactId>DigitalStore</artifactId>
+        <groupId>com.mxw.DigitalStore</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
     <dependencies>
         <dependency>
             <groupId>org.mxw</groupId>

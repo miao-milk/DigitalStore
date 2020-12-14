@@ -1,19 +1,17 @@
 package com.mxw.member.service.impl;
 
 
-import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.mxw.common.model.entity.ShopBuyer;
 import com.mxw.common.model.param.MemberParam;
 import com.mxw.common.model.vo.MemberVO;
 import com.mxw.common.model.vo.PageVO;
-import com.mxw.common.utils.ObjectConvert;
+import com.mxw.member.convert.ShopBuyerConvert;
 import com.mxw.member.mapper.ShopMapper;
+import com.mxw.member.model.entity.ShopBuyer;
 import com.mxw.member.service.ShopService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +43,7 @@ public class ShopServiceImpl implements ShopService {
         long current = buyerIPage.getCurrent();
         long size = buyerIPage.getSize();
         if (buyerIPage.getTotal()>0){
-            List<MemberVO> memberVOList = ObjectConvert.INSTANCE.ShopBuyerEntityToMemberVOList(buyerIPage.getRecords());
+            List<MemberVO> memberVOList = ShopBuyerConvert.INSTANCE.ShopBuyerEntityToMemberVOList(buyerIPage.getRecords());
             return new PageVO<MemberVO>(total,current,size,memberVOList);
         }
         return new PageVO<MemberVO>(0,current,size,new ArrayList<>());

@@ -1,7 +1,7 @@
 package com.mxw.member.mapper;
 
-import com.mxw.common.model.entity.ShopBuyer;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mxw.member.model.entity.ShopBuyer;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

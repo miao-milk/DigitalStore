@@ -1,10 +1,7 @@
 package com.mxw.member;
 
 
-import com.mxw.common.model.entity.ShopBuyer;
-import com.mxw.common.model.param.MemberParam;
-import com.mxw.common.model.vo.MemberVO;
-import com.mxw.common.model.vo.PageVO;
+import com.mxw.member.model.entity.ShopBuyer;
 import com.mxw.member.service.ShopService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +22,7 @@ public class MemberApplicationTest {
     @Test
     public void contextLoads() {
         List<ShopBuyer> ShopBuyer = shopService.queryAll();
-        for (ShopBuyer item : ShopBuyer) {
+        for (com.mxw.member.model.entity.ShopBuyer item : ShopBuyer) {
             System.out.println((ShopBuyer)item);
         }
     }

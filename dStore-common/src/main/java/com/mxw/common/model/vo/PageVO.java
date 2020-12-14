@@ -1,7 +1,5 @@
 package com.mxw.common.model.vo;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.mxw.common.model.entity.ShopBuyer;
 import lombok.Data;
 
 import java.io.Serializable;

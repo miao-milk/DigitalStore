@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +31,7 @@ public class ShopController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
     @ApiImplicitParams({@ApiImplicitParam(name = "memberParam",value = "查询用户参数",required = true,dataType = "MemberParam",paramType = "body")})
     public ResponseUtils list(@RequestBody MemberParam memberParam){
 
