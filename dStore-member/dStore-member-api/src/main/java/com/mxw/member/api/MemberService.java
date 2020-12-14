@@ -1,10 +1,7 @@
 package com.mxw.member.api;
 
-import com.mxw.common.model.param.MemberParam;
 import com.mxw.common.model.vo.PageVO;
 import com.mxw.member.dto.ShopBuyerDTO;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**

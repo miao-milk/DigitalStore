@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @ApiModel(value = "ShopBuyerDTO",description = "用户信息传输模型")
@@ -15,7 +16,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ShopBuyerDTO {
+public class ShopBuyerDTO implements Serializable {
+
+
 
     @ApiModelProperty("卖家id")
     private Long sellerId;

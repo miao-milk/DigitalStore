@@ -1,6 +1,6 @@
 package com.mxw.member.convert;
 
-import com.mxw.common.model.vo.MemberVO;
+import com.mxw.member.dto.ShopBuyerDTO;
 import com.mxw.member.entity.ShopBuyer;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -14,7 +14,7 @@ public interface ShopBuyerConvert {
     ShopBuyerConvert INSTANCE= Mappers.getMapper(ShopBuyerConvert.class);
 
     //把ShopBuyer转为MemberVo
-    MemberVO ShopBuyerEntityToMemberVO(ShopBuyer shopBuyer);
+    ShopBuyerDTO EntityToDTO(ShopBuyer shopBuyer);
     //把ShopBuyerList转为MemberVoList
-    List<MemberVO> ShopBuyerEntityToMemberVOList(List<ShopBuyer> shopBuyer);
+    List<ShopBuyerDTO> EntityToDTO(List<ShopBuyer> shopBuyer);
 }

@@ -1,4 +1,0 @@
-logging:
-  level:
-    com.mxw.member.mapper:
-      debug

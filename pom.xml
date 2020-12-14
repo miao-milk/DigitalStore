@@ -41,7 +41,7 @@
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>2.2.2.RELEASE</version>
+                <version>2.1.0.RELEASE</version>
                 <!-->设置类型为pom，子项目可以依赖继承<-->
                 <type>pom</type>
                 <scope>import</scope>

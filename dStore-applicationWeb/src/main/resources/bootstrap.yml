@@ -37,14 +37,14 @@ dubbo:
     address: nacos://127.0.0.1:8848
   application:
     qos:
-      port: 22310 #dubbo qos 端口配置，命令行注入
+      port: 22320 #dubbo qos 端口配置，命令行注入
   consumer:
     check: false
-    timeout: 5000
+    timeout: 3000
     retries: -1
 
-
-#日志配置
-logging:
-  config: classpath:log4j2.xml
+#
+##日志配置
+#logging:
+#  config: classpath:log4j2.xml
 

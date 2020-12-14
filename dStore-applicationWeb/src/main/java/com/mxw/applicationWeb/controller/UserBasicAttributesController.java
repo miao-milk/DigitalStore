@@ -8,7 +8,7 @@ import com.mxw.member.dto.ShopBuyerDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
-import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController("/member")
 public class UserBasicAttributesController {
 
-    @DubboReference
+    @Reference
     private MemberService memberService;
 
     @PostMapping("/allMember")
     @ApiImplicitParams({
-    @ApiImplicitParam(name = "shopBuyerDTO", value = "用户查询参数", dataType = "shopBuyerDTO", paramType = "body"),
+    @ApiImplicitParam(name = "ShopBuyerDTO", value = "用户查询参数", dataType = "ShopBuyerDTO", paramType = "body"),
     @ApiImplicitParam(name = "pageNo", value = "页码", required =true,defaultValue ="0",dataType = "int", paramType = "query"),
     @ApiImplicitParam(name = "pageSize", value = "每页记录数", required =true,defaultValue ="10",dataType = "int", paramType = "query")
     })
