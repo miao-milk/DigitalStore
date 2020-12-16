@@ -4,7 +4,6 @@ package com.mxw.member;
 import com.mxw.common.model.param.MemberParam;
 import com.mxw.common.model.vo.MemberVO;
 import com.mxw.common.model.vo.PageVO;
-import com.mxw.member.service.ShopService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 @Builder
 public class ShopBuyerDTO implements Serializable {
 
-
     @ApiModelProperty("卖家id")
     private Long sellerId;
 
