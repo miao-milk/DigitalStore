@@ -34,5 +34,3 @@ dubbo:
     timeout: 3000
     retries: -1
 
-
-

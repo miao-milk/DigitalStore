@@ -16,17 +16,17 @@ import java.util.List;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class MemberApplicationTest {
-
-    @Autowired
-    ShopService shopService;
-
-    @Test
-    public void contextLoads() {
-        MemberParam memberParam = new MemberParam();
-        memberParam.setPage(1l);
-        memberParam.setPageSize(10l);
-        PageVO<MemberVO> memberVOS = shopService.queryPage(memberParam);
-        List<MemberVO> items = memberVOS.getItems();
-        items.stream().peek(e-> System.out.println(e));
-    }
+//
+//    @Autowired
+//    ShopService shopService;
+//
+//    @Test
+//    public void contextLoads() {
+//        MemberParam memberParam = new MemberParam();
+//        memberParam.setPage(1l);
+//        memberParam.setPageSize(10l);
+//        PageVO<MemberVO> memberVOS = shopService.queryPage(memberParam);
+//        List<MemberVO> items = memberVOS.getItems();
+//        items.stream().peek(e-> System.out.println(e));
+//    }
 }

@@ -1,7 +1,6 @@
 package com.mxw.member.api;
 
 import com.mxw.common.model.entity.LabelEntity;
-import com.mxw.common.utils.ResponseUtils;
 
 import java.util.List;
 
@@ -13,5 +12,11 @@ public interface LabelService {
 
     List<LabelEntity> queryallLabel();
 
-    void addLabel();
+    void addLabel(String labelContent);
+
+    List<LabelEntity> queryLabelBySellerId(String sellerId);
+
+    void addLabelBySellerId(String sellerId, String labelId);
+
+    void deleteLabelBySellerId(String sellerId, String labelId);
 }
