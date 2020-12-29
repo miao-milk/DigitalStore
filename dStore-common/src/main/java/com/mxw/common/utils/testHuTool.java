@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class testHuTool {
 
     public static void main(String[] args) {
+
 //        int a = 1;
 //        //aStr为"1"
 //        String aStr = Convert.toStr(a);

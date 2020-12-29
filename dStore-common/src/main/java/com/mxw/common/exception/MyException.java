@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MyException extends RuntimeException{
-
     //枚举各个异常代码和信息
     private ErrorCode errorCode;
-
 }

@@ -17,6 +17,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableDiscoveryClient
 @EnableSwagger2
 public class ApplicationWeb {
+    /**
+     * 前端
+     * @param args
+     */
     public static void main(String[] args) {
         SpringApplication.run(ApplicationWeb.class,args);
     }
