@@ -3,10 +3,12 @@ package com.mxw.applicationWeb.controller;
 import com.mxw.common.enumCode.CommonErrorCode;
 import com.mxw.common.exception.MyException;
 import com.mxw.common.utils.Result;
+import com.mxw.user.api.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.dubbo.config.annotation.Reference;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -14,7 +16,6 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpSession;
 @Api(value = "登录退出", tags = "登录退出", description = "登录退出")
 @RestController
 public class LoginController {
+
 
     @PostMapping("/login")
     @ApiOperation("登录接口")

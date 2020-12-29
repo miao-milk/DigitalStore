@@ -1,7 +1,6 @@
 package com.mxw.user.convert;
 
 import com.mxw.common.model.dto.UserDTO;
-import com.mxw.common.model.entity.ShopBuyerDetail;
 import com.mxw.user.model.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

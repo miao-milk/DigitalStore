@@ -21,4 +21,9 @@ public class UserDTO implements Serializable {
      * 用户密码
      */
     private String password;
+
+    /**
+     * 盐
+     */
+    private String salt;
 }

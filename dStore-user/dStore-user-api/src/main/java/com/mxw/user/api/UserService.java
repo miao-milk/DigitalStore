@@ -13,4 +13,9 @@ public interface UserService {
      * 注册
      */
     void addUser(UserDTO user) throws MyException;
+
+    /**
+     * 通过系统用户名查询用户
+     */
+    UserDTO findUserByName(String userName) throws MyException;
 }

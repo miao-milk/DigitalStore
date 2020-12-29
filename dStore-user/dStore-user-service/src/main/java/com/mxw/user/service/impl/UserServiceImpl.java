@@ -36,4 +36,13 @@ public class UserServiceImpl implements UserService {
         user.setPassword(md5Hash.toHex());
         userMapper.insert(user);
     }
+
+    @Override
+    public UserDTO findUserByName(String userName) throws MyException {
+        //查看用户是否存在
+        User user = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUserName, userName));
+        UserDTO userDTO= UserConvert.INSTANCE.EntityToDTO(user);
+        userDTO.setSalt(user.getSalt());
+        return userDTO;
+    }
 }
