@@ -5,6 +5,7 @@ import com.mxw.common.model.vo.PageVO;
 import com.mxw.member.dto.ShopBuyerDTO;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -31,4 +32,6 @@ public interface MemberService {
     void addMemberDetail(ShopBuyerDetail shopBuyerDetail);
 
     void uploadMembers(List<Object> list);
+
+    Map<Integer,List<ShopBuyerDTO>> queryMemberLevel(int level);
 }

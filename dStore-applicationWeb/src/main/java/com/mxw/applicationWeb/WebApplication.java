@@ -16,12 +16,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
         HibernateJpaAutoConfiguration.class})
 @EnableDiscoveryClient
 @EnableSwagger2
-public class ApplicationWeb {
+public class WebApplication {
     /**
      * 前端
      * @param args
      */
     public static void main(String[] args) {
-        SpringApplication.run(ApplicationWeb.class,args);
+        SpringApplication.run(WebApplication.class,args);
     }
 }

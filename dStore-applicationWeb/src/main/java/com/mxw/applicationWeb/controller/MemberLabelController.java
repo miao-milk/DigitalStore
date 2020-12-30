@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Api(value = "会员标签管理", tags = "会员标签管理", description = "会员标签管理")
+@Api(value = "会员标签管理会员等级", tags = "会员标签管理", description = "会员标签管理")
 @RestController("/label")
-public class UserLabelController {
+public class MemberLabelController {
 
     @Reference
     private LabelService labelService;

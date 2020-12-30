@@ -42,6 +42,7 @@ public class ShopBuyerDTO implements Serializable {
     @ApiModelProperty("交易金额（购买总金额）")
     private BigDecimal buyTotalMoney;
 
-
+    @ApiModelProperty("会员等级，0：店铺客户，1：普通会员，2：高级会员，3：VIP会员， 4：至尊VIP会员。如果不传入值则默认为全部等级。")
+    private Integer grade;
 
 }

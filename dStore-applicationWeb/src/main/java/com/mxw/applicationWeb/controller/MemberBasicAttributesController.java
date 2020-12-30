@@ -22,7 +22,7 @@ import java.util.UUID;
 
 @Api(value = "会员基本属性管理", tags = "会员基本属性管理", description = "会员基本属性管理")
 @RestController("/member")
-public class UserBasicAttributesController {
+public class MemberBasicAttributesController {
 
     @Reference
     private MemberService memberService;
