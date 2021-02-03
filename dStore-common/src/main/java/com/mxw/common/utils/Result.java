@@ -1,7 +1,11 @@
 package com.mxw.common.utils;
 
 import org.apache.http.HttpStatus;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.context.request.ServletWebRequest;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +23,8 @@ public class Result extends HashMap<String, Object> {
 
 
     public Result() {
+        HttpServletResponse response = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getResponse();
+        response.addHeader("Access-Control-Allow-Origin", "*");
         put("code", 200);
         put("message", "success");
     }

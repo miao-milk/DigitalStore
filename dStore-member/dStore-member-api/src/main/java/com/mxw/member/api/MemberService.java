@@ -17,7 +17,7 @@ public interface MemberService {
      * 分页查询用户基本属性列表
      * @return
      */
-   PageVO<ShopBuyerDTO> queryShopBuyerByPage( ShopBuyerDTO shopBuyerDTO, Integer pageNo,Integer pageSize);
+   PageVO<ShopBuyerDTO> queryShopBuyerByPage( ShopBuyerDTO shopBuyerDTO);
 
     /**
      * 将该用户添加到黑名单中
@@ -25,7 +25,7 @@ public interface MemberService {
      */
     void addBlackList(String sellerId);
 
-    ShopBuyerDetail getMemberDetailBySellerId(String sellerId);
+    ShopBuyerDetail getMemberDetailByShopBuyerId(String shopBuyerId);
 
     void modifyMemberDetail(ShopBuyerDetail shopBuyerDetail);
 
@@ -34,4 +34,6 @@ public interface MemberService {
     void uploadMembers(List<Object> list);
 
     Map<Integer,List<ShopBuyerDTO>> queryMemberLevel(int level);
+
+    PageVO<ShopBuyerDTO> queryShopBuyer();
 }

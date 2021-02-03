@@ -128,7 +128,7 @@ public class ShopBuyer implements Serializable {
 	/**
 	 * 星座 0:白羊座 1:金牛座 2:双子座 3:巨蟹座 4:狮子座 5:处女座 6:天秤座 7:天蝎座 8:射手座 9:摩羯座 10:水瓶座 11:双鱼座
 	 */
-	private Integer constellation;
+	private String constellation;
 	/**
 	 * 最后下单时间
 	 */

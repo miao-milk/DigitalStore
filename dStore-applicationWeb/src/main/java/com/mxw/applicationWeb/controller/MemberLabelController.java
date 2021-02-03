@@ -1,15 +1,13 @@
 package com.mxw.applicationWeb.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mxw.common.exception.MyException;
 import com.mxw.common.model.entity.LabelEntity;
 import com.mxw.common.utils.Result;
 import com.mxw.member.api.LabelService;
 import io.swagger.annotations.*;
 import org.apache.dubbo.config.annotation.Reference;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,7 +25,19 @@ public class MemberLabelController {
     @ApiOperation("查询标签库列表")
     public Result allLabel() {
         List<LabelEntity> labelList = labelService.queryallLabel();
-        return Result.ok("查询标签库成功").put("data", labelList);
+        return Result.ok("查询标签库成功").put("data", labelList).put("count",labelList.size());
+    }
+
+
+    /**
+     * 查询标签库列表
+     */
+    @PostMapping("/deleteLabel")
+    @ApiOperation("查询标签库列表")
+    public Result deleteLabel(@RequestBody String parms) {
+        String[] ids = JSONObject.parseObject(parms, String[].class);
+        labelService.deleteLabel(ids);
+        return Result.ok("删除标签成功");
     }
 
     /**

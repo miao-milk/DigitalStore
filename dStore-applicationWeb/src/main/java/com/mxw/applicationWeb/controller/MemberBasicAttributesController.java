@@ -4,6 +4,7 @@ package com.mxw.applicationWeb.controller;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.metadata.Sheet;
 import com.alibaba.excel.support.ExcelTypeEnum;
+import com.alibaba.fastjson.JSONObject;
 import com.mxw.applicationWeb.listener.ExcelListener;
 import com.mxw.common.model.entity.ShopBuyerDetail;
 import com.mxw.common.model.vo.PageVO;
@@ -21,24 +22,30 @@ import java.util.List;
 import java.util.UUID;
 
 @Api(value = "会员基本属性管理", tags = "会员基本属性管理", description = "会员基本属性管理")
-@RestController("/member")
+@RestController
 public class MemberBasicAttributesController {
 
     @Reference
     private MemberService memberService;
 
-    @PostMapping("/allMember")
+    @GetMapping("/allMember")
+    @ApiOperation("查找全部用户")
+    public Result queryAllMember() {
+        PageVO<ShopBuyerDTO> shopBuyerDTOS = memberService.queryShopBuyer();
+
+        return Result.ok("分页条件查找用户成功").put("data", shopBuyerDTOS.getItems()).put("count",shopBuyerDTOS.getCounts());
+    }
+
+    @PostMapping("/allMemberByParam")
     @ApiOperation("分页条件查找用户")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "ShopBuyerDTO", value = "用户查询参数", dataType = "ShopBuyerDTO", paramType = "body"),
-            @ApiImplicitParam(name = "pageNo", value = "页码", required = true, defaultValue = "0", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(name = "pageSize", value = "每页记录数", required = true, defaultValue = "10", dataType = "int", paramType = "query")
-    })
-    public Result queryAllMember(@RequestBody ShopBuyerDTO shopBuyerDTO, @RequestParam Integer pageNo, @RequestParam Integer pageSize) {
+            })
+    public Result queryAllMemberByParam(@RequestBody String params) {
+        ShopBuyerDTO shopBuyerDTO = JSONObject.parseObject(params, ShopBuyerDTO.class);
+        PageVO<ShopBuyerDTO> shopBuyerDTOS = memberService.queryShopBuyerByPage(shopBuyerDTO);
 
-        PageVO<ShopBuyerDTO> shopBuyerDTOS = memberService.queryShopBuyerByPage(shopBuyerDTO, pageNo, pageSize);
-
-        return Result.ok("分页条件查找用户成功").put("data", shopBuyerDTOS.getItems()).put("pageNo", shopBuyerDTOS.getPage()).put("pageSize", shopBuyerDTOS.getPageSize());
+        return Result.ok("分页条件查找用户成功").put("data", shopBuyerDTOS.getItems()).put("pageNo", shopBuyerDTOS.getPage()).put("pageSize", shopBuyerDTOS.getPageSize()).put("count",shopBuyerDTOS.getCounts());
     }
 
     @DeleteMapping("/addBlackList/{sellerId}")
@@ -52,13 +59,13 @@ public class MemberBasicAttributesController {
         return Result.ok("添加黑名单成功");
     }
 
-    @GetMapping("/getMemberDetail/{sellerId}")
+    @GetMapping("/getMemberDetail/{shopBuyerId}")
     @ApiOperation("获取用户详情信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "sellerId", value = "用户id", required = false, dataType = "String", paramType = "path")
+            @ApiImplicitParam(name = "shopBuyerId", value = "用户id", required = false, dataType = "String", paramType = "path")
     })
-    public Result getMemberDetail(@PathVariable("sellerId") String sellerId) {
-        ShopBuyerDetail shopByer = memberService.getMemberDetailBySellerId(sellerId);
+    public Result getMemberDetail(@PathVariable("shopBuyerId") String shopBuyerId) {
+        ShopBuyerDetail shopByer = memberService.getMemberDetailByShopBuyerId(shopBuyerId);
         return Result.ok("获取用户详情信息成功").put("data", shopByer);
     }
 

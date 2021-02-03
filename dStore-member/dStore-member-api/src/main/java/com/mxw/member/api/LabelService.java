@@ -19,4 +19,6 @@ public interface LabelService {
     void addLabelBySellerId(String sellerId, String labelId);
 
     void deleteLabelBySellerId(String sellerId, String labelId);
+
+    void deleteLabel(String[] ids);
 }

@@ -1,6 +1,10 @@
 package com.mxw.member.service.impl;
 
+import com.alibaba.excel.util.CollectionUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.mxw.common.enumCode.CommonErrorCode;
+import com.mxw.common.exception.ErrorCode;
+import com.mxw.common.exception.MyException;
 import com.mxw.common.model.entity.BuyerLabelEntity;
 import com.mxw.common.model.entity.LabelEntity;
 import com.mxw.member.api.LabelService;
@@ -9,6 +13,8 @@ import com.mxw.member.mapper.LabelMapper;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -59,5 +65,14 @@ public class LabelServiceImpl  implements LabelService {
     @Override
     public void deleteLabelBySellerId(String sellerId, String labelId) {
         buyerLabelLinkMapper.delete(new LambdaQueryWrapper<BuyerLabelEntity>().eq(BuyerLabelEntity::getLabelId,labelId).eq(BuyerLabelEntity::getSellerId,sellerId));
+    }
+
+    @Override
+    public void deleteLabel(String[] ids) {
+        List list = CollectionUtils.arrayToList(ids);
+        int i = buyerLabelLinkMapper.deleteBatchIds(list);
+        if (i<=0){
+            throw new MyException(CommonErrorCode.ERROR_CODE_10005);
+        }
     }
 }
