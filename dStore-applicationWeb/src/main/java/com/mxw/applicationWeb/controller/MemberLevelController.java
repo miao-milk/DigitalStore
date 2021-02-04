@@ -23,7 +23,7 @@ public class MemberLevelController {
     private MemberService memberService;
 
     @GetMapping("/queryMemberLevel")
-    @ApiOperation("登录接口")
+    @ApiOperation("会员等级")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "level", value = "等级类型", dataType = "Integer", paramType = "query"),
            })

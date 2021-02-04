@@ -21,6 +21,9 @@ public class ShopBuyerDTO implements Serializable {
     @ApiModelProperty("会员id")
     private Long shopBuyerId;
 
+    @ApiModelProperty("会员id")
+    private Long sellerId;
+
     @ApiModelProperty("买家昵称")
     private String buyerNick;
 

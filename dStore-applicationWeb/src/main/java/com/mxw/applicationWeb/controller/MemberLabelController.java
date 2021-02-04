@@ -2,7 +2,8 @@ package com.mxw.applicationWeb.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mxw.common.exception.MyException;
-import com.mxw.common.model.entity.LabelEntity;
+import com.mxw.common.model.entity.LabelDO;
+import com.mxw.common.model.vo.LabelVO;
 import com.mxw.common.utils.Result;
 import com.mxw.member.api.LabelService;
 import io.swagger.annotations.*;
@@ -19,18 +20,19 @@ public class MemberLabelController {
     private LabelService labelService;
 
     /**
-     * 查询标签库列表
+     * 查询该用户下标签库列表
      */
     @GetMapping("/allLabel")
     @ApiOperation("查询标签库列表")
     public Result allLabel() {
-        List<LabelEntity> labelList = labelService.queryallLabel();
+        String sellerId="2";
+        List<LabelDO> labelList = labelService.queryallLabel(sellerId);
         return Result.ok("查询标签库成功").put("data", labelList).put("count",labelList.size());
     }
 
 
     /**
-     * 查询标签库列表
+     * 批量删除标签库列表
      */
     @PostMapping("/deleteLabel")
     @ApiOperation("查询标签库列表")
@@ -50,42 +52,6 @@ public class MemberLabelController {
         return Result.ok("新增标签成功");
     }
 
-    /**
-     * 查询一个用户下的标签
-     */
-    @ApiOperation("查询一个用户下的标签")
-    @GetMapping("/queryLabel/{sellerId}")
-    public Result queryLabelBySellerId(@ApiParam("用户id") @PathVariable String sellerId) throws MyException {
-        List<LabelEntity> oweLabelList = labelService.queryLabelBySellerId(sellerId);
-        return Result.ok("返回用户标签成功").put("data", oweLabelList);
-    }
 
-    /**
-     * 为一个用户添加标签内容
-     */
-    @ApiOperation("为一个用户添加标签内容")
-    @GetMapping("/addSellerLabel")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "sellerId", value = "用户id", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "labelId", value = "标签id", dataType = "String", paramType = "query")
-    })
-    public Result addLabelBySellerId(@RequestParam String sellerId, @RequestParam String labelId) throws MyException {
-        labelService.addLabelBySellerId(sellerId, labelId);
-        return Result.ok("添加用户标签成功");
-    }
-
-    /**
-     * 为一个用户去除标签内容
-     */
-    @ApiOperation("为一个用户去除标签内容")
-    @GetMapping("/deleteSellerLabel")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "sellerId", value = "用户id", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "labelId", value = "标签id", dataType = "String", paramType = "query")
-    })
-    public Result deleteLabelBySellerId(@RequestParam String sellerId, @RequestParam String labelId) throws MyException {
-        labelService.deleteLabelBySellerId(sellerId, labelId);
-        return Result.ok("移除用户标签成功");
-    }
 
 }

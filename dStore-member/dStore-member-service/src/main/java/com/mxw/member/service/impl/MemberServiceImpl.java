@@ -1,20 +1,17 @@
 package com.mxw.member.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.mxw.common.model.entity.ShopBuyerDetail;
+import com.mxw.common.model.dto.BuyerLabelDTO;
+import com.mxw.common.model.entity.ShopBuyerDO;
+import com.mxw.common.model.vo.LabelVO;
 import com.mxw.common.model.vo.PageVO;
 import com.mxw.member.api.MemberService;
 import com.mxw.member.convert.ShopBuyerConvert;
 import com.mxw.member.dto.ShopBuyerDTO;
 import com.mxw.member.entity.ShopBuyer;
 import com.mxw.member.mapper.ShopMapper;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +30,17 @@ public class MemberServiceImpl implements MemberService {
     ShopMapper shopMapper;
 
     @Override
+    public List<LabelVO> queryLabelByshopBuyerId(String shopBuyerId) {
+
+        List<BuyerLabelDTO> buyerLabelDTOS = shopMapper.queryLabelByshopBuyerId(shopBuyerId);
+        List<LabelVO> collect = buyerLabelDTOS.stream().map(dto -> {
+            return new LabelVO(dto.getLabelName(), dto.getWeight());
+        }).collect(Collectors.toList());
+
+        return collect;
+    }
+
+    @Override
     public PageVO<ShopBuyerDTO> queryShopBuyerByPage(ShopBuyerDTO shopBuyerDTO) {
         //使用mybatis的分页插件
         QueryWrapper<ShopBuyer> queryWrapper = new QueryWrapper();
@@ -46,42 +54,14 @@ public class MemberServiceImpl implements MemberService {
         return new PageVO<ShopBuyerDTO>(memberVOList.size(), 0, 0, memberVOList);
     }
 
-    @Override
-    public void addBlackList(String sellerId) {
-        UpdateWrapper<ShopBuyer> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("seller_id", sellerId);
-        updateWrapper.set("is_blacklist", "1");
-        shopMapper.update(null, updateWrapper);
-    }
 
     @Override
-    public ShopBuyerDetail getMemberDetailByShopBuyerId(String shopBuyerId) {
+    public ShopBuyerDO getMemberDetailByShopBuyerId(String shopBuyerId) {
         ShopBuyer shopBuyer = shopMapper.selectOne(new QueryWrapper<ShopBuyer>().eq("shop_buyer_id", shopBuyerId));
-        ShopBuyerDetail shopBuyerDetail = ShopBuyerConvert.INSTANCE.EntityToDetail(shopBuyer);
-        return shopBuyerDetail;
+        ShopBuyerDO shopBuyerDO = ShopBuyerConvert.INSTANCE.EntityToDetail(shopBuyer);
+        return shopBuyerDO;
     }
 
-    @Override
-    public void modifyMemberDetail(ShopBuyerDetail shopBuyerDetail) {
-        ShopBuyer shopBuyer = ShopBuyerConvert.INSTANCE.DetailToEntity(shopBuyerDetail);
-        shopMapper.updateById(shopBuyer);
-    }
-
-    @Override
-    public void addMemberDetail(ShopBuyerDetail shopBuyerDetail) {
-
-        ShopBuyer shopBuyer = ShopBuyerConvert.INSTANCE.DetailToEntity(shopBuyerDetail);
-        shopMapper.insert(shopBuyer);
-    }
-
-    @Override
-    public void uploadMembers(List<Object> list) {
-        for (Object o : list) {
-            ShopBuyerDetail shopBuyerDetail = (ShopBuyerDetail) o;
-            ShopBuyer shopBuyer = ShopBuyerConvert.INSTANCE.DetailToEntity(shopBuyerDetail);
-            shopMapper.insert(shopBuyer);
-        }
-    }
 
     @Override
     public Map<Integer, List<ShopBuyerDTO>> queryMemberLevel(int level) {
@@ -202,4 +182,35 @@ public class MemberServiceImpl implements MemberService {
                 .collect(Collectors.groupingBy(ShopBuyerDTO::getGrade));
         return collect;
     }
+
+
+//    @Override
+//    public void modifyMemberDetail(ShopBuyerDetail shopBuyerDetail) {
+//        ShopBuyer shopBuyer = ShopBuyerConvert.INSTANCE.DetailToEntity(shopBuyerDetail);
+//        shopMapper.updateById(shopBuyer);
+//    }
+//
+//    @Override
+//    public void addBlackList(String sellerId) {
+//        UpdateWrapper<ShopBuyer> updateWrapper = new UpdateWrapper<>();
+//        updateWrapper.eq("seller_id", sellerId);
+//        updateWrapper.set("is_blacklist", "1");
+//        shopMapper.update(null, updateWrapper);
+//    }
+//
+//    @Override
+//    public void addMemberDetail(ShopBuyerDetail shopBuyerDetail) {
+//
+//        ShopBuyer shopBuyer = ShopBuyerConvert.INSTANCE.DetailToEntity(shopBuyerDetail);
+//        shopMapper.insert(shopBuyer);
+//    }
+//
+//    @Override
+//    public void uploadMembers(List<Object> list) {
+//        for (Object o : list) {
+//            ShopBuyerDetail shopBuyerDetail = (ShopBuyerDetail) o;
+//            ShopBuyer shopBuyer = ShopBuyerConvert.INSTANCE.DetailToEntity(shopBuyerDetail);
+//            shopMapper.insert(shopBuyer);
+//        }
+//    }
 }

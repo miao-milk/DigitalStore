@@ -36,3 +36,9 @@ dubbo:
 #logging:
 #  level:
 #    root: debug
+# mp
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath*:/mapper/**.xml

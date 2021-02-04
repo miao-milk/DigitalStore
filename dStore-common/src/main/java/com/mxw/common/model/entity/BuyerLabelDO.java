@@ -8,29 +8,39 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * 
+ * 会员标签信息表
  * 
  * @author miaoXiaoWen
  * @email miaoXiaoWen@gmail.com
  * @date 2020-12-16 13:54:37
  */
 @Data
-@TableName("shop_label")
-public class LabelEntity implements Serializable {
+@TableName("shop_buyer_label")
+public class BuyerLabelDO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 标签id
+	 * 会员标签主键Id
 	 */
 	@TableId
-	private Integer labelId;
+	private Integer id;
 	/**
-	 * 标签内容
+	 * 用户id
 	 */
-	private String labelName;
+	private Integer sellerId;
 	/**
-	 * 标签创建时间
+	 * 标签id
+	 */
+	private Integer labelId;
+
+	/**
+	 *用户与标签绑定时间
 	 */
 	private Date createTime;
+
+	/**
+	 *标签权值
+	 */
+	private Integer weight;
 
 }

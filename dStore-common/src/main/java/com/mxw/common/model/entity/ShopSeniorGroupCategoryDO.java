@@ -16,7 +16,7 @@ import lombok.Data;
  */
 @Data
 @TableName("shop_buyer_senior_group_category")
-public class ShopSeniorGroupCategoryEntity implements Serializable {
+public class ShopSeniorGroupCategoryDO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**

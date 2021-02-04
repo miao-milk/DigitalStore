@@ -2,7 +2,6 @@ package com.mxw.common.model.entity;
 
 import com.alibaba.excel.metadata.BaseRowModel;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
@@ -19,7 +18,7 @@ import java.util.Date;
  */
 @Data
 @ApiModel(value = "ShopBuyerDetail")
-public class ShopBuyerDetail extends BaseRowModel implements Serializable{
+public class ShopBuyerDO extends BaseRowModel implements Serializable{
 	private static final long serialVersionUID = 3L;
 
 	/**

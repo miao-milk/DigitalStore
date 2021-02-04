@@ -1,10 +1,10 @@
 package com.mxw.member.mapper;
 
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.mxw.common.model.entity.BuyerLabelDO;
+import com.mxw.common.model.entity.ShopGroupDO;
 import org.apache.ibatis.annotations.Mapper;
 
-
 @Mapper
-public interface BuyerLabelLinkMapper extends BaseMapper<BuyerLabelDO> {
+public interface GroupMapper extends BaseMapper<ShopGroupDO> {
 }

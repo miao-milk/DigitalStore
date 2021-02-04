@@ -2,21 +2,19 @@ package com.mxw.member.service.impl;
 
 import com.alibaba.excel.util.CollectionUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.mxw.common.enumCode.CommonErrorCode;
-import com.mxw.common.exception.ErrorCode;
-import com.mxw.common.exception.MyException;
-import com.mxw.common.model.entity.BuyerLabelEntity;
-import com.mxw.common.model.entity.LabelEntity;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.mxw.common.model.dto.BuyerLabelDTO;
+import com.mxw.common.model.entity.BuyerLabelDO;
+import com.mxw.common.model.entity.LabelDO;
+import com.mxw.common.model.vo.LabelVO;
 import com.mxw.member.api.LabelService;
 import com.mxw.member.mapper.BuyerLabelLinkMapper;
 import com.mxw.member.mapper.LabelMapper;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -29,50 +27,42 @@ public class LabelServiceImpl  implements LabelService {
     BuyerLabelLinkMapper buyerLabelLinkMapper;
 
     @Override
-    public List<LabelEntity> queryallLabel() {
-        List<LabelEntity> labelList = labelMapper.selectList(null);
-        return labelList;
+    public List<LabelDO> queryallLabel(String sellerId) {
+        //获取该用户的下的标签列表
+        List<BuyerLabelDTO> buyerLabelDTOS = labelMapper.selectListBySellerId(sellerId);
+        List<LabelDO> collect = buyerLabelDTOS.stream().map(dto -> {
+            LabelDO labelDO = new LabelDO();
+            labelDO.setLabelId(dto.getLabelId());
+            labelDO.setCreateTime(dto.getCreateTime());
+            labelDO.setLabelName(dto.getLabelName());
+            return labelDO;
+        }).collect(Collectors.toList());
+        return collect;
     }
 
     @Override
     public void addLabel(String labelContent) {
         //创建标签实体类
-        LabelEntity labelEntity = new LabelEntity();
-        labelEntity.setLabelName(labelContent);
-        labelEntity.setCreateTime(new Date());
-        labelMapper.insert(labelEntity);
+        LabelDO labelDO = new LabelDO();
+        labelDO.setLabelName(labelContent);
+        labelDO.setCreateTime(new Date());
+        labelMapper.insert(labelDO);
     }
 
-
-    @Override
-    public List<LabelEntity> queryLabelBySellerId(String sellerId) {
-
-        List<LabelEntity> OweLabelList = labelMapper.selectListBySellerId(sellerId);
-        return OweLabelList;
-    }
-
-    @Override
-    public void addLabelBySellerId(String sellerId, String labelId) {
-        //首先构建中间关系表entity
-        BuyerLabelEntity buyerLabelEntity=new BuyerLabelEntity();
-        buyerLabelEntity.setCreateTime(new Date());
-        buyerLabelEntity.setSellerId(Integer.parseInt(sellerId));
-        buyerLabelEntity.setLabelId(Integer.parseInt(labelId));
-        //标识用户标签
-        buyerLabelLinkMapper.insert(buyerLabelEntity);
-    }
-
-    @Override
-    public void deleteLabelBySellerId(String sellerId, String labelId) {
-        buyerLabelLinkMapper.delete(new LambdaQueryWrapper<BuyerLabelEntity>().eq(BuyerLabelEntity::getLabelId,labelId).eq(BuyerLabelEntity::getSellerId,sellerId));
-    }
 
     @Override
     public void deleteLabel(String[] ids) {
         List list = CollectionUtils.arrayToList(ids);
-        int i = buyerLabelLinkMapper.deleteBatchIds(list);
-        if (i<=0){
-            throw new MyException(CommonErrorCode.ERROR_CODE_10005);
+        for (Object o : list) {
+            Integer id=Integer.parseInt(o+"");
+            //首先删除该标签下的用户
+            QueryWrapper<BuyerLabelDO> wrapper = new QueryWrapper<>();
+            wrapper.eq("label_id",id);
+            buyerLabelLinkMapper.delete(wrapper);
+            //再删除标签
+            labelMapper.deleteById(id);
         }
+        System.out.println("删除成功");
     }
+
 }

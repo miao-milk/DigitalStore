@@ -13,6 +13,8 @@ public enum CommonErrorCode implements ErrorCode {
     ERROR_CODE_10003(10003,"密码错误"),
     ERROR_CODE_10004(10004,"用户名已存在"),
     ERROR_CODE_10005(10005,"删除标签失败"),
+    ERROR_CODE_10006(10006,"获取树形结构失败"),
+    ERROR_CODE_10007(10007,"该分组名称已存在"),
 
     /*****************特殊异常异常编码***********************/
 

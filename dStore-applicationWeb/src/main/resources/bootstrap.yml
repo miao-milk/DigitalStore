@@ -42,9 +42,9 @@ dubbo:
     check: false
     timeout: 3000
     retries: -1
-
 #
 ##日志配置
 #logging:
 #  config: classpath:log4j2.xml
-
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**.xml
