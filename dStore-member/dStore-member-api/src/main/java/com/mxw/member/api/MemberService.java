@@ -3,10 +3,9 @@ package com.mxw.member.api;
 import com.mxw.common.model.entity.ShopBuyerDO;
 import com.mxw.common.model.vo.LabelVO;
 import com.mxw.common.model.vo.PageVO;
-import com.mxw.member.dto.ShopBuyerDTO;
+
 
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -14,18 +13,13 @@ import java.util.Map;
  */
 public interface MemberService {
 
-    List<LabelVO> queryLabelByshopBuyerId(String shopBuyerId);
+    PageVO<ShopBuyerDO> queryShopBuyer();
 
-    /**
-     * 分页查询用户基本属性列表
-     *
-     * @return
-     */
-    PageVO<ShopBuyerDTO> queryShopBuyerByPage(ShopBuyerDTO shopBuyerDTO);
+    PageVO<ShopBuyerDO> queryShopBuyerByPage(ShopBuyerDO shopBuyerDTO);
 
     ShopBuyerDO getMemberDetailByShopBuyerId(String shopBuyerId);
 
-    Map<Integer, List<ShopBuyerDTO>> queryMemberLevel(int level);
+    List<LabelVO> queryLabelByshopBuyerId(String shopBuyerId);
 
-    PageVO<ShopBuyerDTO> queryShopBuyer();
+
 }

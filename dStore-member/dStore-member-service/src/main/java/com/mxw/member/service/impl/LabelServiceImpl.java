@@ -1,15 +1,19 @@
 package com.mxw.member.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.excel.util.CollectionUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mxw.common.model.dto.BuyerLabelDTO;
 import com.mxw.common.model.entity.BuyerLabelDO;
 import com.mxw.common.model.entity.LabelDO;
+import com.mxw.common.model.entity.ShopBuyerDO;
 import com.mxw.common.model.vo.LabelVO;
+import com.mxw.common.model.vo.PageVO;
 import com.mxw.member.api.LabelService;
 import com.mxw.member.mapper.BuyerLabelLinkMapper;
 import com.mxw.member.mapper.LabelMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Date;
@@ -41,11 +45,23 @@ public class LabelServiceImpl  implements LabelService {
     }
 
     @Override
-    public void addLabel(String labelContent) {
+    public List<LabelDO> queryLabelByParams(LabelDO labelDO) {
+        //使用mybatis的分页插件
+        QueryWrapper<LabelDO> queryWrapper = new QueryWrapper();
+        if (ObjectUtil.isNotNull(labelDO)) {
+            queryWrapper.like(StringUtils.isNotBlank(labelDO.getLabelName()), "label_name", labelDO.getLabelName());
+        }
+        List<LabelDO> labelDOS = labelMapper.selectList(queryWrapper);
+        return labelDOS;
+    }
+
+    @Override
+    public void addLabel(String sellerId,String labelContent) {
         //创建标签实体类
         LabelDO labelDO = new LabelDO();
         labelDO.setLabelName(labelContent);
         labelDO.setCreateTime(new Date());
+        labelDO.setSellerId(Integer.parseInt(sellerId));
         labelMapper.insert(labelDO);
     }
 

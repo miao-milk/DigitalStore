@@ -111,6 +111,13 @@ public class GroupServiceImpl implements GroupService {
         groupMapper.update(shopGroupDO,wrapper);
     }
 
+    @Override
+    public void deleteGroup(String sellerId, String id) {
+        QueryWrapper<ShopGroupDO> wrapper = new QueryWrapper<>();
+        wrapper.eq("group_id", id).eq("seller_id", sellerId);
+        groupMapper.delete(wrapper);
+    }
+
     private void insertshopGroupDO(String sellerId, String content, Integer pid) {
         ShopGroupDO shopGroupDO = new ShopGroupDO();
         shopGroupDO.setSellerId(Integer.parseInt(sellerId));

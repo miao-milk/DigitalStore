@@ -15,4 +15,6 @@ public interface GroupService {
     void addGroup(String sellerId, String content, String pid);
 
     void editGroup(String sellerId, String content, String id);
+
+    void deleteGroup(String sellerId, String id);
 }

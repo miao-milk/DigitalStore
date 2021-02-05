@@ -3,7 +3,9 @@ package com.mxw.applicationWeb.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.mxw.common.exception.MyException;
 import com.mxw.common.model.entity.LabelDO;
+import com.mxw.common.model.entity.ShopBuyerDO;
 import com.mxw.common.model.vo.LabelVO;
+import com.mxw.common.model.vo.PageVO;
 import com.mxw.common.utils.Result;
 import com.mxw.member.api.LabelService;
 import io.swagger.annotations.*;
@@ -31,11 +33,23 @@ public class MemberLabelController {
     }
 
 
+    @PostMapping("/allLabelByParam")
+    @ApiOperation("条件查找标签")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "LabelDO", value = "用户查询参数", dataType = "LabelDO", paramType = "body"),
+    })
+    public Result queryAllMemberByParam(@RequestBody String params) {
+        LabelDO labelDO = JSONObject.parseObject(params, LabelDO.class);
+        List<LabelDO> labelList = labelService.queryLabelByParams(labelDO);
+        return Result.ok("查询标签库成功").put("data", labelList).put("count",labelList.size());
+    }
+
+
     /**
      * 批量删除标签库列表
      */
     @PostMapping("/deleteLabel")
-    @ApiOperation("查询标签库列表")
+    @ApiOperation("删除标签")
     public Result deleteLabel(@RequestBody String parms) {
         String[] ids = JSONObject.parseObject(parms, String[].class);
         labelService.deleteLabel(ids);
@@ -48,10 +62,8 @@ public class MemberLabelController {
     @ApiOperation("新增标签到标签库内容")
     @GetMapping("/addLabel")
     public Result addLabel(@ApiParam("标签内容") @RequestParam String labelContent) {
-        labelService.addLabel(labelContent);
+        String sellerId="2";
+        labelService.addLabel(sellerId,labelContent);
         return Result.ok("新增标签成功");
     }
-
-
-
 }

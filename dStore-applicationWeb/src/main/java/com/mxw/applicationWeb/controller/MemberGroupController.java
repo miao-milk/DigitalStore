@@ -66,4 +66,19 @@ public class MemberGroupController {
         return Result.ok("修改成功");
     }
 
+
+    /**
+     * 添加分组
+     */
+    @ApiOperation("删除分组内容")
+    @GetMapping("/deleteGroup")
+    @ApiImplicitParams({
+           @ApiImplicitParam(name = "id", value = "id", dataType = "String", paramType = "query")
+    })
+    public Result deleteGroup(@RequestParam String id) {
+        String sellerId="2";
+        groupService.deleteGroup(sellerId,id);
+        return Result.ok("删除成功");
+    }
+
 }

@@ -22,13 +22,4 @@ public class MemberLevelController {
     @Reference
     private MemberService memberService;
 
-    @GetMapping("/queryMemberLevel")
-    @ApiOperation("会员等级")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "level", value = "等级类型", dataType = "Integer", paramType = "query"),
-           })
-    public Result queryMemberLevel(@RequestParam(value = "level",defaultValue = "0") int level){
-        Map<Integer, List<ShopBuyerDTO>> stringListMap = memberService.queryMemberLevel(level);
-        return Result.ok().put("data",stringListMap);
-    }
 }

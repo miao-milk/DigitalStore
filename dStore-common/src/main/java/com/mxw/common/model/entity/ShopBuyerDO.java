@@ -1,8 +1,7 @@
 package com.mxw.common.model.entity;
 
-import com.alibaba.excel.metadata.BaseRowModel;
 import com.baomidou.mybatisplus.annotation.TableId;
-import io.swagger.annotations.ApiModel;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -17,8 +16,8 @@ import java.util.Date;
  * @date 2020-12-10 15:00:54
  */
 @Data
-@ApiModel(value = "ShopBuyerDetail")
-public class ShopBuyerDO extends BaseRowModel implements Serializable{
+@TableName("shop_buyer")
+public class ShopBuyerDO implements Serializable {
 	private static final long serialVersionUID = 3L;
 
 	/**
@@ -166,73 +165,10 @@ public class ShopBuyerDO extends BaseRowModel implements Serializable{
 	 * 复购周期（天）
 	 */
 	private Integer afterPeriod;
-	/**
-	 * 人群画像类型，1:学生 2:白领 3:公务员 4:IT 5:金融族 6:居家族 7:医护人员 8:其他
-	 */
-	private Integer crowdPortraitType;
-	/**
-	 * 聚划算敏感度
-	 */
-	private Integer jhsSensitivity;
-	/**
-	 * 万人团敏感度
-	 */
-	private Integer stepSensitivity;
-	/**
-	 * 是否给过中差评 0:否 1：是
-	 */
-	private Integer isNeutralBadRate;
+
 	/**
 	 * 是否黑名单 0:否 1：是
 	 */
 	private Integer isBlacklist;
-	/**
-	 * 标签ID组合，逗号分隔
-	 */
-	private String buyerLabelId;
-	/**
-	 * 领卡时间
-	 */
-	private Date registerDate;
-	/**
-	 * 积分余额
-	 */
-	private Integer pointBalance;
-	/**
-	 * 最后积分变更时间
-	 */
-	private Date lastPointUpdateTime;
-	/**
-	 * 积分系统 签到次数
-	 */
-	private Integer pointsSignInCount;
-	/**
-	 * 积分系统 参与大转盘次数
-	 */
-	private Integer pointsJoinBigWheelCount;
-	/**
-	 * 积分系统 兑换积分次数
-	 */
-	private Integer pointsExchangePointsCount;
-	/**
-	 * 积分系统 兑换次数(包含积分和实物)
-	 */
-	private Integer pointsExchangeCount;
-	/**
-	 * 积分系统 消耗积分
-	 */
-	private Integer pointsCostPoints;
-	/**
-	 * 积分系统 是否完善资料
-	 */
-	private Integer pointsIsFillInformation;
-	/**
-	 * 微信关注时间 如果用户曾多次关注，则取最后关注时间
-	 */
-	private Date wxSubscribeTime;
-	/**
-	 * 微信性别 0：未知 1：男 2：女
-	 */
-	private Integer wxSex;
 
 }

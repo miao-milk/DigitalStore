@@ -7,8 +7,7 @@ import com.mxw.common.model.entity.ShopBuyerDO;
 import com.mxw.common.model.vo.LabelVO;
 import com.mxw.common.model.vo.PageVO;
 import com.mxw.common.utils.Result;
-import com.mxw.member.api.MemberService;
-import com.mxw.member.dto.ShopBuyerDTO;
+import com.mxw.member.api.MemberService;;
 import io.swagger.annotations.*;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +24,7 @@ public class MemberBasicAttributesController {
     @GetMapping("/allMember")
     @ApiOperation("查找全部用户")
     public Result queryAllMember() {
-        PageVO<ShopBuyerDTO> shopBuyerDTOS = memberService.queryShopBuyer();
-
+        PageVO<ShopBuyerDO> shopBuyerDTOS = memberService.queryShopBuyer();
         return Result.ok("分页条件查找用户成功").put("data", shopBuyerDTOS.getItems()).put("count",shopBuyerDTOS.getCounts());
     }
 
@@ -36,8 +34,8 @@ public class MemberBasicAttributesController {
             @ApiImplicitParam(name = "ShopBuyerDTO", value = "用户查询参数", dataType = "ShopBuyerDTO", paramType = "body"),
             })
     public Result queryAllMemberByParam(@RequestBody String params) {
-        ShopBuyerDTO shopBuyerDTO = JSONObject.parseObject(params, ShopBuyerDTO.class);
-        PageVO<ShopBuyerDTO> shopBuyerDTOS = memberService.queryShopBuyerByPage(shopBuyerDTO);
+        ShopBuyerDO shopBuyerDTO = JSONObject.parseObject(params, ShopBuyerDO.class);
+        PageVO<ShopBuyerDO> shopBuyerDTOS = memberService.queryShopBuyerByPage(shopBuyerDTO);
 
         return Result.ok("分页条件查找用户成功").put("data", shopBuyerDTOS.getItems()).put("pageNo", shopBuyerDTOS.getPage()).put("pageSize", shopBuyerDTOS.getPageSize()).put("count",shopBuyerDTOS.getCounts());
     }
@@ -52,7 +50,6 @@ public class MemberBasicAttributesController {
         ShopBuyerDO shopByer = memberService.getMemberDetailByShopBuyerId(shopBuyerId);
         return Result.ok("获取用户详情信息成功").put("data", shopByer);
     }
-
 
     /**
      * 查询一个用户下的标签
