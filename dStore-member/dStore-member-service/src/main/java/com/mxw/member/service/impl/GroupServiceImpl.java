@@ -1,17 +1,23 @@
 package com.mxw.member.service.impl;
 
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mxw.common.enumCode.CommonErrorCode;
 import com.mxw.common.exception.MyException;
 import com.mxw.common.model.dto.BuyerLabelDTO;
 import com.mxw.common.model.entity.BuyerLabelDO;
 import com.mxw.common.model.entity.LabelDO;
+import com.mxw.common.model.entity.ShopBuyerDO;
 import com.mxw.common.model.entity.ShopGroupDO;
+import com.mxw.common.model.vo.GroupDetailVO;
 import com.mxw.common.model.vo.GroupVO;
 import com.mxw.member.api.GroupService;
 import com.mxw.member.mapper.BuyerLabelLinkMapper;
 import com.mxw.member.mapper.GroupMapper;
+import com.mxw.member.mapper.ShopMapper;
 import io.swagger.models.auth.In;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +32,9 @@ public class GroupServiceImpl implements GroupService {
 
     @Autowired
     GroupMapper groupMapper;
+
+    @Autowired
+    ShopMapper shopMapper;
 
 
     @Override
@@ -108,6 +117,7 @@ public class GroupServiceImpl implements GroupService {
         wrapper.eq("group_id", id).eq("seller_id", sellerId);
         ShopGroupDO shopGroupDO = new ShopGroupDO();
         shopGroupDO.setGroupName(content);
+        shopGroupDO.setUpdateTime(new Date());
         groupMapper.update(shopGroupDO,wrapper);
     }
 
@@ -118,12 +128,37 @@ public class GroupServiceImpl implements GroupService {
         groupMapper.delete(wrapper);
     }
 
+    @Override
+    public List<ShopBuyerDO> getGroupMember(String sellerId, String id) {
+        QueryWrapper<ShopBuyerDO> wrapper = new QueryWrapper<>();
+        wrapper.eq("group_id", id).eq("seller_id", sellerId);
+        List<ShopBuyerDO> shopBuyerDOS = shopMapper.selectList(wrapper);
+        return shopBuyerDOS;
+    }
+
+    @Override
+    public GroupDetailVO getGroupDetail(String sellerId, String id) {
+        QueryWrapper<ShopGroupDO> wrapper = new QueryWrapper<>();
+        wrapper.eq("group_id", id).eq("seller_id", sellerId);
+        ShopGroupDO groupDO = groupMapper.selectOne(wrapper);
+        Integer pid = groupDO.getPid();
+        ShopGroupDO fatherShopGroupDO = groupMapper.selectById(pid);
+        GroupDetailVO groupDetailVO = new GroupDetailVO();
+        groupDetailVO.setLabelName(groupDO.getGroupName());
+        groupDetailVO.setCreateTime(DateUtil.format(groupDO.getCreateTime(),"yyyy-MM-dd"));
+        groupDetailVO.setUpdateTime(DateUtil.format(groupDO.getUpdateTime(),"yyyy-MM-dd"));
+        groupDetailVO.setFatherName(fatherShopGroupDO.getGroupName());
+
+        return groupDetailVO;
+    }
+
     private void insertshopGroupDO(String sellerId, String content, Integer pid) {
         ShopGroupDO shopGroupDO = new ShopGroupDO();
         shopGroupDO.setSellerId(Integer.parseInt(sellerId));
         shopGroupDO.setPid(pid);
         shopGroupDO.setGroupName(content);
         shopGroupDO.setCreateTime(new Date());
+        shopGroupDO.setUpdateTime(new Date());
         groupMapper.insert(shopGroupDO);
     }
 }

@@ -23,6 +23,10 @@ public class ShopGroupDO {
      * 标签创建时间
      */
     private Date createTime;
+    /**
+     * 标签修改时间
+     */
+    private Date updateTime;
 
     /**
      * 父标签

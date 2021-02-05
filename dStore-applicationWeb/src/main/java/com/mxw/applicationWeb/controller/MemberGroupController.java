@@ -1,6 +1,8 @@
 package com.mxw.applicationWeb.controller;
 
 
+import com.mxw.common.model.entity.ShopBuyerDO;
+import com.mxw.common.model.vo.GroupDetailVO;
 import com.mxw.common.model.vo.GroupVO;
 import com.mxw.common.utils.Result;
 import com.mxw.member.api.GroupService;
@@ -33,8 +35,6 @@ public class MemberGroupController {
         List<GroupVO> labelList = groupService.getGroupTree(sellerId);
         return Result.ok("查询标签库成功").put("data", labelList).put("count",labelList.size());
     }
-
-
 
     /**
      * 添加分组
@@ -79,6 +79,37 @@ public class MemberGroupController {
         String sellerId="2";
         groupService.deleteGroup(sellerId,id);
         return Result.ok("删除成功");
+    }
+
+
+    /**
+     * 查询分组列表
+     */
+    @GetMapping("/groupMember")
+    @ApiOperation("查询分组人群列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "id", dataType = "String", paramType = "query")
+    })
+    public Result getGroupMember(@RequestParam String id) {
+        //查询该用户下的分组列表
+        String sellerId="2";
+        List<ShopBuyerDO> labelList = groupService.getGroupMember(sellerId,id);
+        return Result.ok("查询分组人群列表成功").put("data", labelList).put("count",labelList.size());
+    }
+
+    /**
+     * 查询分组列表
+     */
+    @GetMapping("/getGroupDetail")
+    @ApiOperation("查询分组详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "id", dataType = "String", paramType = "query")
+    })
+    public Result getGroupDetail(@RequestParam String id) {
+        //查询该用户下的分组列表
+        String sellerId="2";
+        GroupDetailVO groupDetailVO= groupService.getGroupDetail(sellerId,id);
+        return Result.ok("查询标签库成功").put("data", groupDetailVO);
     }
 
 }
