@@ -2,6 +2,8 @@ package com.mxw.member.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.mxw.common.enumCode.CommonErrorCode;
+import com.mxw.common.exception.MyException;
 import com.mxw.common.model.dto.BuyerLabelDTO;
 import com.mxw.common.model.entity.BuyerLabelDO;
 import com.mxw.common.model.entity.LabelDO;
@@ -123,6 +125,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void addLabelByshopBuyerId(String sellerId,String shopBuyerId, String labelContent) {
         //先往标签库中添加标签
+        if (StringUtils.isBlank(labelContent)){
+            throw new MyException(CommonErrorCode.ERROR_CODE_10008);
+        }
         LabelDO labelDO = new LabelDO();
         labelDO.setSellerId(Integer.parseInt(sellerId));
         labelDO.setLabelName(labelContent);
@@ -148,7 +153,7 @@ public class MemberServiceImpl implements MemberService {
         Integer labelId = one.getLabelId();
         labelMapper.deleteById(labelId);
         QueryWrapper<BuyerLabelDO> buyerLabelDOWrapper = new QueryWrapper<>();
-        wrapper.eq("label_id", labelId).eq("seller_id", sellerId);
+        buyerLabelDOWrapper.eq("label_id", labelId).eq("shop_buyer_id", shopBuyerId);
         buyerLabelLinkMapper.delete(buyerLabelDOWrapper);
     }
 

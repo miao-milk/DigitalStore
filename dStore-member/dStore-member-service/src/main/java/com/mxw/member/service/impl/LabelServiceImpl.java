@@ -4,6 +4,8 @@ import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.excel.util.CollectionUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.mxw.common.enumCode.CommonErrorCode;
+import com.mxw.common.exception.MyException;
 import com.mxw.common.model.dto.BuyerLabelDTO;
 import com.mxw.common.model.entity.BuyerLabelDO;
 import com.mxw.common.model.entity.LabelDO;
@@ -33,14 +35,9 @@ public class LabelServiceImpl  implements LabelService {
     @Override
     public List<LabelDO> queryallLabel(String sellerId) {
         //获取该用户的下的标签列表
-        List<BuyerLabelDTO> buyerLabelDTOS = labelMapper.selectListBySellerId(sellerId);
-        List<LabelDO> collect = buyerLabelDTOS.stream().map(dto -> {
-            LabelDO labelDO = new LabelDO();
-            labelDO.setLabelId(dto.getLabelId());
-            labelDO.setCreateTime(dto.getCreateTime());
-            labelDO.setLabelName(dto.getLabelName());
-            return labelDO;
-        }).collect(Collectors.toList());
+        QueryWrapper<LabelDO> queryWrapper = new QueryWrapper();
+        queryWrapper.eq("seller_id",sellerId);
+        List<LabelDO> collect = labelMapper.selectList(queryWrapper);
         return collect;
     }
 
@@ -58,6 +55,9 @@ public class LabelServiceImpl  implements LabelService {
     @Override
     public void addLabel(String sellerId,String labelContent) {
         //创建标签实体类
+        if (StringUtils.isBlank(labelContent)){
+            throw new MyException(CommonErrorCode.ERROR_CODE_10008);
+        }
         LabelDO labelDO = new LabelDO();
         labelDO.setLabelName(labelContent);
         labelDO.setCreateTime(new Date());
