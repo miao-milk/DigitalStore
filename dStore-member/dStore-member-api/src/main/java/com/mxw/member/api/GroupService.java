@@ -23,4 +23,6 @@ public interface GroupService {
     List<ShopBuyerDO> getGroupMember(String sellerId, String id);
 
     GroupDetailVO getGroupDetail(String sellerId, String id);
+
+    void addGroupMember(String id,String shopBuyerId);
 }

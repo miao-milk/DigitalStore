@@ -98,6 +98,21 @@ public class MemberGroupController {
     }
 
     /**
+     * 人群列表添加会员
+     */
+    @GetMapping("/addGroupMember")
+    @ApiOperation("人群列表添加会员")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "groupId", value = "contentId", dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "shopBuyerId", value = "shopBuyerId", dataType = "String", paramType = "query")
+    })
+    public Result addGroupMember(@RequestParam String groupId,@RequestParam String shopBuyerId) {
+        //查询该用户下的分组列表
+        groupService.addGroupMember(groupId,shopBuyerId);
+        return Result.ok("添加会员成功");
+    }
+
+    /**
      * 查询分组列表
      */
     @GetMapping("/getGroupDetail")

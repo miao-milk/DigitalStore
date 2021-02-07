@@ -6,6 +6,7 @@ import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mxw.common.enumCode.CommonErrorCode;
+import com.mxw.common.exception.ErrorCode;
 import com.mxw.common.exception.MyException;
 import com.mxw.common.model.dto.BuyerLabelDTO;
 import com.mxw.common.model.entity.BuyerLabelDO;
@@ -130,9 +131,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<ShopBuyerDO> getGroupMember(String sellerId, String id) {
-        QueryWrapper<ShopBuyerDO> wrapper = new QueryWrapper<>();
-        wrapper.eq("group_id", id).eq("seller_id", sellerId);
-        List<ShopBuyerDO> shopBuyerDOS = shopMapper.selectList(wrapper);
+        List<ShopBuyerDO> shopBuyerDOS = shopMapper.selectListByshopBuyerId(id,sellerId);
         return shopBuyerDOS;
     }
 
@@ -150,6 +149,17 @@ public class GroupServiceImpl implements GroupService {
         groupDetailVO.setFatherName(fatherShopGroupDO.getGroupName());
 
         return groupDetailVO;
+    }
+
+    @Override
+    public void addGroupMember(String groupId,String shopBuyerId) {
+        //先查询是否存在该组中
+        Integer row=shopMapper.selectGroup(shopBuyerId,groupId);
+        if (row>0){
+            throw new MyException(CommonErrorCode.ERROR_CODE_10009);
+        }
+        //增加关联
+        shopMapper.addGroupMember(shopBuyerId,groupId);
     }
 
     private void insertshopGroupDO(String sellerId, String content, Integer pid) {

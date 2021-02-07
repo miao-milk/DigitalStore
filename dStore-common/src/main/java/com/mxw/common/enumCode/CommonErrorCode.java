@@ -16,6 +16,7 @@ public enum CommonErrorCode implements ErrorCode {
     ERROR_CODE_10006(10006,"获取树形结构失败"),
     ERROR_CODE_10007(10007,"该分组名称已存在"),
     ERROR_CODE_10008(10008,"标签名不能为空"),
+    ERROR_CODE_10009(10009,"分组已存在该用户"),
 
     /*****************特殊异常异常编码***********************/
 
