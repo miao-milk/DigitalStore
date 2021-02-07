@@ -2,6 +2,7 @@ package com.mxw.member.api;
 
 import com.mxw.common.model.entity.ShopBuyerDO;
 import com.mxw.common.model.vo.LabelVO;
+import com.mxw.common.model.vo.MemberConsumptionLevelVO;
 import com.mxw.common.model.vo.PageVO;
 
 
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public interface MemberService {
 
-    PageVO<ShopBuyerDO> queryShopBuyer();
+    PageVO<ShopBuyerDO> queryShopBuyer(String sellerId);
 
     PageVO<ShopBuyerDO> queryShopBuyerByPage(ShopBuyerDO shopBuyerDTO);
 
@@ -21,5 +22,9 @@ public interface MemberService {
 
     List<LabelVO> queryLabelByshopBuyerId(String shopBuyerId);
 
+    MemberConsumptionLevelVO queryMemberConsumptionLevel(String sellerId);
 
+    void addLabelByshopBuyerId(String sellerId,String shopBuyerId, String labelContent);
+
+    void deleteLabelByshopBuyerId(String sellerId, String shopBuyerId, String labelContent);
 }

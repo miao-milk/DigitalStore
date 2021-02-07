@@ -27,7 +27,7 @@ public class BuyerLabelDO implements Serializable {
 	/**
 	 * 用户id
 	 */
-	private Integer sellerId;
+	private Integer shopBuyerId;
 	/**
 	 * 标签id
 	 */
