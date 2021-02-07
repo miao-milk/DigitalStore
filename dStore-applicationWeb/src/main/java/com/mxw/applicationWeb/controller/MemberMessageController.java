@@ -1,6 +1,5 @@
 package com.mxw.applicationWeb.controller;
 
-
 import com.alibaba.fastjson.JSONObject;
 import com.mxw.common.exception.MyException;
 import com.mxw.common.model.entity.ShopBuyerDO;
