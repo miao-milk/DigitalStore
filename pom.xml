@@ -17,7 +17,6 @@
         <module>dStore-applicationWeb</module>
         <module>dStore-gateway</module>
         <module>dStore-member</module>
-        <module>dStore-order</module>
         <module>dStore-security</module>
         <module>dStore-user</module>
     </modules>

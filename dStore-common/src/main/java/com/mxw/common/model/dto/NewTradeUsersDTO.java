@@ -1,14 +1,20 @@
 package com.mxw.common.model.dto;
 
+import lombok.Data;
+
+import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * 今日新增交易用户数
  */
-public class NewTradeUsersDTO {
+@Data
+public class NewTradeUsersDTO implements Serializable {
 
-    private String returnRate;
-    private String orderUser;
-    private List orderUserData;
+    private Integer returnRate;
+    private Integer orderUser;
+    private List<String>   oldTimeList;
+    private List<Integer>   oldUserList;
 
 }

@@ -3,7 +3,7 @@ package com.mxw.applicationWeb.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.mxw.common.model.entity.LabelDO;
 import com.mxw.common.utils.Result;
-import com.mxw.member.api.LabelService;
+import com.mxw.analysis.api.LabelService;
 import io.swagger.annotations.*;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.*;

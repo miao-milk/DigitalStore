@@ -1,5 +1,6 @@
 package com.mxw.common.model.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -10,6 +11,7 @@ import java.util.Date;
 @TableName("trade")
 public class TradeDO {
 
+    @TableId
     private Long tradeId;
     private Long sellerId;
     private Long shopBuyerId;
@@ -17,6 +19,7 @@ public class TradeDO {
     private BigDecimal totalFee;
     private BigDecimal postAmount;
     private BigDecimal price;
+    private BigDecimal orderTotalAmount;
     private String postReceiver;
     private String postAddr;
     private String postCode;
@@ -39,6 +42,5 @@ public class TradeDO {
     private Date lastShippingUpdate_time;
     private Date lastSendTime;
     private Date createTime;
-    private Date orderTotalAmount;
     private Date payType;
 }

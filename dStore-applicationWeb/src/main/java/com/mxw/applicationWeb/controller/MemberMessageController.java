@@ -7,7 +7,7 @@ import com.mxw.common.model.vo.LabelVO;
 import com.mxw.common.model.vo.MemberConsumptionLevelVO;
 import com.mxw.common.model.vo.PageVO;
 import com.mxw.common.utils.Result;
-import com.mxw.member.api.MemberService;;
+import com.mxw.analysis.api.MemberService;;
 import io.swagger.annotations.*;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.*;

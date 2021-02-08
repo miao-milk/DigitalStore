@@ -170,5 +170,9 @@ public class ShopBuyerDO implements Serializable {
 	 * 是否黑名单 0:否 1：是
 	 */
 	private Integer isBlacklist;
+	/**
+	 * 创建时间
+	 */
+	private Date createTime;
 
 }

@@ -5,7 +5,7 @@ import com.mxw.common.model.entity.ShopBuyerDO;
 import com.mxw.common.model.vo.GroupDetailVO;
 import com.mxw.common.model.vo.GroupVO;
 import com.mxw.common.utils.Result;
-import com.mxw.member.api.GroupService;
+import com.mxw.analysis.api.GroupService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
