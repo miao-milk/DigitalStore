@@ -11,6 +11,7 @@ public enum CommonErrorCode implements ErrorCode {
     ERROR_CODE_10001(10001,"查询参数错误"),
     ERROR_CODE_10002(10002,"用户不存在"),
     ERROR_CODE_10003(10003,"密码错误"),
+    ERROR_CODE_10010(10010,"登陆失败"),
     ERROR_CODE_10004(10004,"用户名已存在"),
     ERROR_CODE_10005(10005,"删除标签失败"),
     ERROR_CODE_10006(10006,"获取树形结构失败"),

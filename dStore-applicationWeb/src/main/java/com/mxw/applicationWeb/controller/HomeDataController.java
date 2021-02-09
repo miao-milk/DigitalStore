@@ -11,6 +11,8 @@ import com.mxw.common.utils.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.dubbo.config.annotation.Reference;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -73,8 +75,8 @@ public class HomeDataController {
     @GetMapping("/mapData")
     @ApiOperation("查询地图数据")
     public Result getMapData() {
-        String sellerId="2";
+       String sellerId="2";
        List<AreaDataDO> areaDataDOS= tradeService.getMapData(sellerId);
-        return Result.ok("查询地图数据成功").put("data",areaDataDOS);
+       return Result.ok("查询地图数据成功").put("data",areaDataDOS);
     }
 }

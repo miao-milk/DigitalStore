@@ -2,6 +2,8 @@ package com.mxw.applicationWeb.filter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mxw.common.utils.Result;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 
 import javax.servlet.ServletRequest;
@@ -21,7 +23,9 @@ public class ShiroLoginFilter extends FormAuthenticationFilter {
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         if (request instanceof HttpServletRequest) {
-            if (((HttpServletRequest) request).getMethod().toUpperCase().equals("OPTIONS")) {
+            Subject subject = SecurityUtils.getSubject();
+            Object principal = subject.getPrincipal();
+            if (principal!=null) {
                 return true;
             }
         }

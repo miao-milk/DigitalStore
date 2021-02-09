@@ -23,8 +23,6 @@ public class Result extends HashMap<String, Object> {
 
 
     public Result() {
-        HttpServletResponse response = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getResponse();
-        response.addHeader("Access-Control-Allow-Origin", "*");
         put("code", 200);
         put("message", "success");
     }
