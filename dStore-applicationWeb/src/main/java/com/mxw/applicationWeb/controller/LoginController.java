@@ -29,7 +29,7 @@ public class LoginController {
             @ApiImplicitParam(name = "userName", value = "用户名", required = true,  dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "password", value = "密码", required = true,dataType = "String", paramType = "query")
       })
-    public Result login(String userName, String password, HttpSession session){
+    public Result login(String userName, String password){
         //获取主体对象
         Subject subject = SecurityUtils.getSubject();
         //拿到token
@@ -46,7 +46,7 @@ public class LoginController {
     }
 
     @GetMapping("/logout")
-    @ApiOperation("注册用户")
+    @ApiOperation("退出用户")
     public Result logout(){
         //获取主体对象
         Subject subject = SecurityUtils.getSubject();

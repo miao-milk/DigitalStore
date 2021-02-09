@@ -1,12 +1,13 @@
 package com.mxw.user.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mxw.common.enumCode.CommonErrorCode;
 import com.mxw.common.exception.MyException;
 import com.mxw.common.model.dto.UserDTO;
 import com.mxw.common.utils.SaltUtils;
 import com.mxw.user.api.UserService;
-import com.mxw.user.convert.UserConvert;
 import com.mxw.user.mapper.UserMapper;
 import com.mxw.user.model.entity.User;
 import org.apache.dubbo.config.annotation.Service;
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService {
         if (one!=null){
             throw new MyException(CommonErrorCode.ERROR_CODE_10004);
         }
-        User user= UserConvert.INSTANCE.DTOToEntity(userDTO);
+        User user = BeanUtil.copyProperties(userDTO, User.class);
         //生成盐
         String salt = SaltUtils.getSalt(8);
         //将随机盐保存到数据中
@@ -40,8 +41,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findUserByName(String userName) throws MyException {
         //查看用户是否存在
-        User user = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUserName, userName));
-        UserDTO userDTO= UserConvert.INSTANCE.EntityToDTO(user);
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        User user = userMapper.selectOne(wrapper.eq("username",userName));
+        UserDTO userDTO = BeanUtil.copyProperties(user, UserDTO.class);
         userDTO.setSalt(user.getSalt());
         return userDTO;
     }

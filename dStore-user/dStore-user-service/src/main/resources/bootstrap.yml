@@ -1,5 +1,5 @@
 server:
-  port: 10010
+  port: 10030
 #全局引用
 nacos:
   server:
@@ -23,7 +23,7 @@ dubbo:
     base-packages: com.mxw #dubbo 服务扫描基准包
   protocol:
     name: dubbo
-    port: 20890
+    port: 20893
   registry:
     address: nacos://127.0.0.1:8848
   application:

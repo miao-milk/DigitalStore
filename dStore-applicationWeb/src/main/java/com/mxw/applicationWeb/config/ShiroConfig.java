@@ -1,5 +1,6 @@
 package com.mxw.applicationWeb.config;
 
+import com.mxw.applicationWeb.filter.ShiroLoginFilter;
 import com.mxw.applicationWeb.model.CustRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.realm.Realm;
@@ -8,6 +9,7 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.servlet.Filter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,9 +46,23 @@ public class ShiroConfig {
         //配置系统受限资源
         //配置系统公共资源
         Map<String,String> map=new HashMap<String, String>();
+        //anon设置为公共资源，放行资源在下面
+        map.put("/login", "anon");
+        //表示可以访问的swagger文档路径
+        map.put("/swagger-ui.html", "anon");
+        map.put("/swagger-resources/**", "anon");
+        map.put("/swagger-resources", "anon");
+        map.put("/v2/api-docs", "anon");
+        map.put("/webjars/**", "anon");
+        //authc 是需要授权认证的
+        map.put("/**","authc");
 
         //设置默认认证界面路径
-        shiroFilterFactoryBean.setLoginUrl("/login.html");
+        //shiroFilterFactoryBean.setLoginUrl("/login.html");
+        //配置返回信息
+        Map<String, Filter> filters = shiroFilterFactoryBean.getFilters();
+        filters.put("authc", new ShiroLoginFilter());
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
         //创建web管理器
         return shiroFilterFactoryBean;
     }
