@@ -1,8 +1,7 @@
 package com.mxw.analysis.service.impl;
 
-import cn.hutool.core.date.DateTime;
+
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mxw.analysis.api.MemberService;
@@ -10,6 +9,7 @@ import com.mxw.analysis.api.TradeService;
 import com.mxw.analysis.mapper.AreaMapper;
 import com.mxw.analysis.mapper.TradeEverydayMapper;
 import com.mxw.analysis.mapper.TradeMapper;
+import com.mxw.analysis.utils.TradeEveryDayUtils;
 import com.mxw.common.model.dto.NewTradeUsersDTO;
 import com.mxw.common.model.dto.OrderDTO;
 import com.mxw.common.model.dto.SalesDTO;
@@ -36,17 +36,19 @@ public class TradeServiceImpl implements TradeService {
     private MemberService memberService;
     @Autowired
     AreaMapper areaMapper;
+    @Autowired
+    TradeEveryDayUtils everyDayUtils;
 
     @Override
     public SalesDTO getTotalSales(String sellerId) {
         //获取今日销售额 成交额
-        List<TradeDO> todayTrades = getTodayTrades(sellerId);
+        List<TradeDO> todayTrades = everyDayUtils.getTodayTrades(sellerId);
         BigDecimal salesLastDay = new BigDecimal("0");
         for (TradeDO tradeDO : todayTrades) {
             salesLastDay = salesLastDay.add(tradeDO.getOrderTotalAmount());
         }
         //获取昨日的销售额
-        TradeEverydayDO yesterdayTradeDO = getyesterdaySales(sellerId);
+        TradeEverydayDO yesterdayTradeDO = everyDayUtils.getyesterdaySales(sellerId);
         BigDecimal yesterdaySales = yesterdayTradeDO.getSales();
         //算出增长量
         BigDecimal subtract = salesLastDay.subtract(yesterdaySales);
@@ -64,10 +66,10 @@ public class TradeServiceImpl implements TradeService {
     public OrderDTO getTotalOrders(String sellerId) {
 
         //获取今日的订单数
-        List<TradeDO> todayTrades = getTodayTrades(sellerId);
+        List<TradeDO> todayTrades = everyDayUtils.getTodayTrades(sellerId);
         //遍历今日订单数，封装一日的销售数据
         //获取昨日的订单数
-        TradeEverydayDO tradeEverydayDO = getyesterdaySales(sellerId);
+        TradeEverydayDO tradeEverydayDO = everyDayUtils.getyesterdaySales(sellerId);
         Integer orders = tradeEverydayDO.getOrders();
 
 
@@ -101,7 +103,7 @@ public class TradeServiceImpl implements TradeService {
             oldUserList.add(tradeEverydayDO.getNewuser());
         }
         //获取昨日会员数
-        TradeEverydayDO yesterdayDO = getyesterdaySales(sellerId);
+        TradeEverydayDO yesterdayDO = everyDayUtils.getyesterdaySales(sellerId);
         NewTradeUsersDTO newTradeUsersDTO = new NewTradeUsersDTO();
         newTradeUsersDTO.setOrderUser(todayUser);
         newTradeUsersDTO.setReturnRate(yesterdayDO.getNewuser());
@@ -121,31 +123,4 @@ public class TradeServiceImpl implements TradeService {
         return collect;
     }
 
-    private List<TradeDO> getTodayTrades(String sellerId) {
-        /**
-         * 原符号       <       <=      >       >=      <>
-         * 对应函数    lt()     le()    gt()    ge()    ne()
-         * Mybatis-plus写法：  queryWrapper.ge("create_time", localDateTime);
-         */
-        QueryWrapper<TradeDO> tradeDOQueryWrapper = new QueryWrapper<>();
-        Date now = new Date();
-        String startTime = DateUtil.format(now, "yyyy-MM-dd 00:00:00");
-        String endTime = DateUtil.format(now, "yyyy-MM-dd 23:59:59");
-        tradeDOQueryWrapper.ge("pay_time", startTime).le("pay_time", endTime).eq("seller_id", sellerId);
-        List<TradeDO> tradeDOS = tradeMapper.selectList(tradeDOQueryWrapper);
-        return tradeDOS;
-    }
-
-    private TradeEverydayDO getyesterdaySales(String sellerId) {
-        //从每日销售记录表获取昨天记录
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(Calendar.DATE, -1);
-        Date yesterday = calendar.getTime();
-        String yesterdayTime = DateUtil.format(yesterday, "yyyy-MM-dd 00:00:00");
-        QueryWrapper<TradeEverydayDO> wrapper = new QueryWrapper<>();
-        wrapper.eq("create_time", yesterdayTime);
-        TradeEverydayDO yesterdayTradeDO = tradeEverydayMapper.selectOne(wrapper);
-        return yesterdayTradeDO;
-    }
 }

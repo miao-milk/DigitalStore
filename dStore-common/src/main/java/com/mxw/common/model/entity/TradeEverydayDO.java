@@ -18,4 +18,8 @@ public class TradeEverydayDO {
     private Integer newuser;
     private Integer deal;
     private Date createTime;
+    private Integer userNum;
+    private Integer ordinaryMemberNum;
+    private Integer intermediateMemberNum;
+    private Integer seniorMemberNum;
 }
