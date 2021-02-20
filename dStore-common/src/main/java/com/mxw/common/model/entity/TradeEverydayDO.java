@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-@TableName("trade_everyday")
+@TableName("seller_everyday")
 public class TradeEverydayDO {
 
     @TableId

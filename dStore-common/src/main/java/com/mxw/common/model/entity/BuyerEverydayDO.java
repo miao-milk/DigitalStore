@@ -15,6 +15,7 @@ public class BuyerEverydayDO {
     private Integer id;
     private Integer sellerId;
     private Integer buyerId;
+    private Integer buyerPrice;
     private String buyerName;
     private Date createTime;
 
