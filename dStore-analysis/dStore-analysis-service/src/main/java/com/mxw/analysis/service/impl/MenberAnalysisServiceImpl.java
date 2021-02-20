@@ -13,9 +13,7 @@ import com.mxw.common.model.vo.NewOldBuyerCompareVO;
 import com.mxw.common.utils.RedisUtils;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 

@@ -8,7 +8,6 @@ import com.mxw.analysis.mapper.GoodsEverydayMapper;
 import com.mxw.analysis.mapper.GoodsMapper;
 import com.mxw.common.model.entity.GoodsDO;
 import com.mxw.common.model.entity.GoodsEverydayDO;
-import com.mxw.common.model.entity.TradeEverydayDO;
 import com.mxw.common.model.vo.ChartResponseVO;
 import com.mxw.common.model.vo.RadarDataVO;
 import com.mxw.common.utils.RedisUtils;
