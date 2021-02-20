@@ -1,6 +1,7 @@
 package com.mxw.common.model.entity;
 
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -11,6 +12,7 @@ import java.util.Date;
 @TableName("trade_everyday")
 public class TradeEverydayDO {
 
+    @TableId
     private Integer id;
     private Integer sellerId;
     private BigDecimal sales;

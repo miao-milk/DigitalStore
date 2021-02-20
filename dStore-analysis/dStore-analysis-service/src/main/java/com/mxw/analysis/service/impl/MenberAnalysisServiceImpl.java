@@ -1,5 +1,6 @@
 package com.mxw.analysis.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.mxw.analysis.api.MenberAnalysisService;
@@ -14,6 +15,7 @@ import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -63,11 +65,13 @@ public class MenberAnalysisServiceImpl implements MenberAnalysisService {
             seriesData2.add(item.getIntermediateMemberNum());
             seriesData3.add(item.getSeniorMemberNum());
         });
-        seriesData.put("data1",seriesData1);
-        seriesData.put("data2",seriesData2);
-        seriesData.put("data3",seriesData3);
+        seriesData.put("ordinaryMember",seriesData1);
+        seriesData.put("intermediateMember",seriesData2);
+        seriesData.put("seniorMember",seriesData3);
         chartResponseVO.setXAxisData(xAxisData);
         chartResponseVO.setSeriesData(seriesData);
+        String jsonString = JSONObject.toJSONString(chartResponseVO);
+        redisUtils.set("LevelMembershipChanges@"+sellerId,jsonString,60*60*24);
         return chartResponseVO;
     }
 
@@ -89,6 +93,8 @@ public class MenberAnalysisServiceImpl implements MenberAnalysisService {
             newOldBuyerCompareDTO.setReturnBuyerPercentSum(0.00);
             newOldBuyerCompareVOList.add(newOldBuyerCompareDTO);
         }
+        String jsonString = JSONObject.toJSONString(newOldBuyerCompareVOList);
+        redisUtils.set("newOldBuyerCompare@"+sellerId,jsonString,60*60*24);
         return newOldBuyerCompareVOList;
     }
 
@@ -101,9 +107,11 @@ public class MenberAnalysisServiceImpl implements MenberAnalysisService {
                 //会员数量走势图
                 result=analysisOfTheNumberOfMembers(sellerId);
             case "2":
-                chartAnalysisResult.setResult("2");
+                //等级会员变化图
+                result=levelMembershipChanges(sellerId);
             case "3":
-                chartAnalysisResult.setResult("3");
+                //新老会员对比图
+                result=newAndOldmembers(sellerId);
             case "4":
                 chartAnalysisResult.setResult("4");
             case "5":
@@ -115,6 +123,57 @@ public class MenberAnalysisServiceImpl implements MenberAnalysisService {
         }
         chartAnalysisResult.setResult(result);
         return chartAnalysisResult;
+    }
+
+    private String newAndOldmembers(String sellerId) {
+        StringBuilder result = new StringBuilder();
+        //从缓存中获取对应的值，减少mysql的io查询
+        Object o = redisUtils.get("newOldBuyerCompare@" + sellerId);
+        List<NewOldBuyerCompareVO> newOldBuyerCompareVO = (List<NewOldBuyerCompareVO>)JSONObject.parse(o.toString());
+        String[] nameArr = {"总成交客户", "新客户", "老客户", "成交1次客户", "成交多次客户", "复购客户（交易次数=2）", "忠实客户（2＜交易次数 ≤ 5）", "粉丝客户（5＜交易次数）","潜在客户（交易次数=1）'"};
+        for (NewOldBuyerCompareVO oldBuyerCompareVO : newOldBuyerCompareVO) {
+            if ("总成交客户".equals(oldBuyerCompareVO.getName())){
+                result.append("总成交客户有"+oldBuyerCompareVO.getBuyerCount()+"人,总订单数为"+oldBuyerCompareVO.getTradeCount());
+            }if ("新客户".equals(oldBuyerCompareVO.getName())){
+                result.append("其中，新用户占比为"+oldBuyerCompareVO.getPercent()+"订单数为"+oldBuyerCompareVO.getTradeCount()+"单，可见新用户购买力低下，需要大力推广拉新活动");
+            }if ("老客户".equals(oldBuyerCompareVO.getName())){
+                result.append("其中，老用户占比为"+oldBuyerCompareVO.getPercent()+"复购数为"+oldBuyerCompareVO.getReturnBuyerCountSum()+"单，可见老用户复购率低，需要开展老用户促销活动");
+            }
+        }
+        return result.toString();
+    }
+
+    private String levelMembershipChanges(String sellerId) {
+        StringBuilder result = new StringBuilder();
+        //从缓存中获取对应的值，减少mysql的io查询
+        Object o = redisUtils.get("LevelMembershipChanges@" + sellerId);
+        ChartResponseVO chartResponseVO = (ChartResponseVO)JSONObject.parse(o.toString());
+        //波动要求出其标准差
+        HashMap<String, List<Integer>> seriesData = chartResponseVO.getSeriesData();
+        //获取日期数据
+        List<String> xAxisData = chartResponseVO.getXAxisData();
+        //获取普通会员
+        List<Integer> ordinaryMemberData = seriesData.get("ordinaryMember");
+        //获取最大下降数对应的日期
+        Integer ordinaryMemberDataMin = CollectionUtil.min(ordinaryMemberData);
+        int ordinaryMemberDataIndex = ordinaryMemberData.indexOf(ordinaryMemberDataMin);
+        String ordinaryMemberDataString = xAxisData.get(ordinaryMemberDataIndex);
+        result.append("在七天时间间期内，在"+ordinaryMemberDataString+"这日有"+ordinaryMemberDataMin+"名普通会员退会，请查清当日是否对应的活动清除会员，请及时搞促销活动，拉回会员");
+        //获取中级会员
+        List<Integer> intermediateMemberData = seriesData.get("intermediateMember");
+        //获取最大下降数对应的日期
+        Integer intermediateMemberDataMin = CollectionUtil.min(intermediateMemberData);
+        int intermediateMemberDataIndex = ordinaryMemberData.indexOf(intermediateMemberDataMin);
+        String intermediateMemberDataDataString = xAxisData.get(intermediateMemberDataIndex);
+        result.append("在七天时间间期内，在"+intermediateMemberDataDataString+"这日有"+intermediateMemberDataMin+"名中级会员退会，请查清当日是否对应的活动清除会员，请及时搞促销活动，拉回会员");
+        //获取高级会员
+        List<Integer> seniorMemberData = seriesData.get("seniorMember");
+        Integer seniorMemberDataMin = CollectionUtil.min(seniorMemberData);
+        int seniorMemberDataIndex = ordinaryMemberData.indexOf(seniorMemberDataMin);
+        String seniorMemberDataString = xAxisData.get(seniorMemberDataIndex);
+        result.append("在七天时间间期内，在"+seniorMemberDataString+"这日有"+seniorMemberDataMin+"名高级会员退会，请查清当日是否对应的活动清除会员，请及时搞促销活动，拉回会员");
+
+        return result.toString();
     }
 
     private String analysisOfTheNumberOfMembers(String sellerId) {
