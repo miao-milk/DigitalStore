@@ -1,6 +1,7 @@
 package com.mxw.analysis.api;
 
 
+import com.mxw.common.model.vo.ChartAnalysisVO;
 import com.mxw.common.model.vo.ChartResponseVO;
 import com.mxw.common.model.vo.NewOldBuyerCompareVO;
 
@@ -15,4 +16,6 @@ public interface MenberAnalysisService {
     ChartResponseVO getLevelMembershipChanges(String sellerId);
 
     List<NewOldBuyerCompareVO> getNewAndOldMembers(String sellerId);
+
+    ChartAnalysisVO getChartAnalysisResult(String analysisType, String sellerId);
 }

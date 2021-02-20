@@ -2,13 +2,18 @@ package com.mxw.applicationWeb.controller;
 
 
 import com.mxw.analysis.api.MenberAnalysisService;
+import com.mxw.common.model.entity.ShopBuyerDO;
+import com.mxw.common.model.vo.ChartAnalysisVO;
 import com.mxw.common.model.vo.ChartResponseVO;
 import com.mxw.common.model.vo.NewOldBuyerCompareVO;
 import com.mxw.common.utils.Result;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -44,6 +49,17 @@ public class MenberAnalysisController {
         //普通会员 中级会员 高级会员
         List<NewOldBuyerCompareVO> NewOldBuyerCompareListDate=menberAnalysisService.getNewAndOldMembers(sellerId);
         return Result.ok().put("data",NewOldBuyerCompareListDate);
+    }
+
+    @GetMapping("/getChartAnalysisResult/{analysisType}")
+    @ApiOperation("获取图表解析信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "analysisType", value = "图表类型", required = false, dataType = "String", paramType = "path")
+    })
+    public Result getChartAnalysisResult(@PathVariable("analysisType") String analysisType) {
+        String sellerId="2";
+        ChartAnalysisVO chartAnalysisResult = menberAnalysisService.getChartAnalysisResult(analysisType,sellerId);
+        return Result.ok("获取用户详情信息成功").put("data", chartAnalysisResult);
     }
 
 }
