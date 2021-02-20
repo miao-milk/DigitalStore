@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @TableName("goods_everyday")
@@ -13,17 +14,19 @@ public class GoodsEverydayDO {
 
     @TableId
     private Integer id;
+    private Integer sellerId;
     private Integer goodsId;
-    private String goodsFeture;
+    private String goodsName;
+    private List<GoodsFeture> goodsSalesFetures;
+    private List<GoodsFeture> goodsLikeFetures;
     private Integer goodsBuyer;
-    private Integer goodsViews;
     private Integer goodsPrice;
     private Date createTime;
 
 
     @Data
-    class GoodsFeture{
-        private String feture;
+    public  class GoodsFeture{
+        private String fetureName;
         private Integer peopleNum;
     }
 }

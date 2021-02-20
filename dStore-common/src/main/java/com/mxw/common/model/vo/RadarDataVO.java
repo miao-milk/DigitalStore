@@ -9,9 +9,15 @@ import java.util.List;
 //雷达图数据
 @Data
 public class RadarDataVO {
-    //属性名
-    private HashMap<String,List<String>> indicators;
-    //属性值
+    //特征标题值
+    private List<String> legendTitle;
+    //销售特征
+    private List<String> indicators;
+    //销售特征值
     private HashMap<String,List<Integer>> seriesDataList;
+    //喜爱特征
+    private List<String> favoriteFeature;
+    //喜爱特征值
+    private HashMap<String,List<Integer>> favoriteFeatureDataList;
 
 }
