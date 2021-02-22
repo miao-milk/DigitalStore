@@ -104,20 +104,27 @@ public class MenberAnalysisServiceImpl implements MenberAnalysisService {
             case "1":
                 //会员数量走势图
                 result=analysisOfTheNumberOfMembers(sellerId);
+                break;
             case "2":
                 //等级会员变化图
                 result=levelMembershipChanges(sellerId);
+                break;
             case "3":
                 //新老会员对比图
                 result=newAndOldmembers(sellerId);
+                break;
             case "4":
                 chartAnalysisResult.setResult("4");
+                break;
             case "5":
                 chartAnalysisResult.setResult("5");
+                break;
             case "6":
                 chartAnalysisResult.setResult("6");
+                break;
             case "7":
                 chartAnalysisResult.setResult("7");
+                break;
         }
         chartAnalysisResult.setResult(result);
         return chartAnalysisResult;
@@ -126,10 +133,12 @@ public class MenberAnalysisServiceImpl implements MenberAnalysisService {
     private String newAndOldmembers(String sellerId) {
         StringBuilder result = new StringBuilder();
         //从缓存中获取对应的值，减少mysql的io查询
-        Object o = redisUtils.get("newOldBuyerCompare@" + sellerId);
-        List<NewOldBuyerCompareVO> newOldBuyerCompareVO = (List<NewOldBuyerCompareVO>)JSONObject.parse(o.toString());
+        String o = (String) redisUtils.get("newOldBuyerCompare@" + sellerId);
+        List newOldBuyerCompareVO = JSONObject.parseObject(o,List.class);
         String[] nameArr = {"总成交客户", "新客户", "老客户", "成交1次客户", "成交多次客户", "复购客户（交易次数=2）", "忠实客户（2＜交易次数 ≤ 5）", "粉丝客户（5＜交易次数）","潜在客户（交易次数=1）'"};
-        for (NewOldBuyerCompareVO oldBuyerCompareVO : newOldBuyerCompareVO) {
+        for (Object o1 : newOldBuyerCompareVO) {
+            String string = o1.toString();
+            NewOldBuyerCompareVO oldBuyerCompareVO = JSONObject.parseObject(string,NewOldBuyerCompareVO.class);
             if ("总成交客户".equals(oldBuyerCompareVO.getName())){
                 result.append("总成交客户有"+oldBuyerCompareVO.getBuyerCount()+"人,总订单数为"+oldBuyerCompareVO.getTradeCount());
             }if ("新客户".equals(oldBuyerCompareVO.getName())){
@@ -144,8 +153,8 @@ public class MenberAnalysisServiceImpl implements MenberAnalysisService {
     private String levelMembershipChanges(String sellerId) {
         StringBuilder result = new StringBuilder();
         //从缓存中获取对应的值，减少mysql的io查询
-        Object o = redisUtils.get("LevelMembershipChanges@" + sellerId);
-        ChartResponseVO chartResponseVO = (ChartResponseVO)JSONObject.parse(o.toString());
+        String o = (String) redisUtils.get("LevelMembershipChanges@" + sellerId);
+        ChartResponseVO chartResponseVO = JSONObject.parseObject(o,ChartResponseVO.class);
         //波动要求出其标准差
         HashMap<String, List<Integer>> seriesData = chartResponseVO.getSeriesData();
         //获取日期数据
@@ -156,30 +165,42 @@ public class MenberAnalysisServiceImpl implements MenberAnalysisService {
         Integer ordinaryMemberDataMin = CollectionUtil.min(ordinaryMemberData);
         int ordinaryMemberDataIndex = ordinaryMemberData.indexOf(ordinaryMemberDataMin);
         String ordinaryMemberDataString = xAxisData.get(ordinaryMemberDataIndex);
-        result.append("在七天时间间期内，在"+ordinaryMemberDataString+"这日有"+ordinaryMemberDataMin+"名普通会员退会，请查清当日是否对应的活动清除会员，请及时搞促销活动，拉回会员");
+        if (ordinaryMemberDataMin<0) {
+            result.append("在七天时间间期内，在" + ordinaryMemberDataString + "这日有" + -(ordinaryMemberDataMin) + "名普通会员退会，请查清当日是否对应的活动清除会员，请及时搞促销活动，拉回会员\n");
+        }else {
+            result.append("在七天时间间期内，会员始终保持在正数范围内，无普通会员退会，请留意会员需求，维持会员数的正常\n");
+        }
         //获取中级会员
         List<Integer> intermediateMemberData = seriesData.get("intermediateMember");
         //获取最大下降数对应的日期
         Integer intermediateMemberDataMin = CollectionUtil.min(intermediateMemberData);
         int intermediateMemberDataIndex = ordinaryMemberData.indexOf(intermediateMemberDataMin);
         String intermediateMemberDataDataString = xAxisData.get(intermediateMemberDataIndex);
-        result.append("在七天时间间期内，在"+intermediateMemberDataDataString+"这日有"+intermediateMemberDataMin+"名中级会员退会，请查清当日是否对应的活动清除会员，请及时搞促销活动，拉回会员");
+        if (intermediateMemberDataMin<0) {
+            result.append("在七天时间间期内，在" + intermediateMemberDataDataString + "这日有" + intermediateMemberDataMin + "名中级会员退会，请查清当日是否对应的活动清除会员，请及时搞促销活动，拉回会员\n");
+        }else {
+            result.append("在七天时间间期内，会员始终保持在正数范围内，无中级会员退会，请留意会员需求，维持会员数的正常\n");
+        }
         //获取高级会员
         List<Integer> seniorMemberData = seriesData.get("seniorMember");
         Integer seniorMemberDataMin = CollectionUtil.min(seniorMemberData);
-        int seniorMemberDataIndex = ordinaryMemberData.indexOf(seniorMemberDataMin);
+        int seniorMemberDataIndex = seniorMemberData.indexOf(seniorMemberDataMin);
         String seniorMemberDataString = xAxisData.get(seniorMemberDataIndex);
-        result.append("在七天时间间期内，在"+seniorMemberDataString+"这日有"+seniorMemberDataMin+"名高级会员退会，请查清当日是否对应的活动清除会员，请及时搞促销活动，拉回会员");
-
+        if (seniorMemberDataMin<0) {
+            result.append("在七天时间间期内，在" + seniorMemberDataString + "这日有" + seniorMemberDataMin + "名高级会员退会，请查清当日是否对应的活动清除会员，请及时搞促销活动，拉回会员\n");
+        }else {
+            result.append("在七天时间间期内，会员始终保持在正数范围内，无高级会员退会，请留意会员需求，维持会员数的正常\n");
+        }
         return result.toString();
     }
 
     private String analysisOfTheNumberOfMembers(String sellerId) {
         StringBuilder result=new StringBuilder();
         //从缓存中获取对应的值，减少mysql的io查询
-        Object o = redisUtils.get("NumberOfMembers@" + sellerId);
-        ChartResponseVO chartResponseVO = (ChartResponseVO)JSONObject.parse(o.toString());
-        //波动要求出其标准差
+        String o =(String)redisUtils.get("NumberOfMembers@" + sellerId);
+
+        ChartResponseVO chartResponseVO = JSONObject.parseObject(o,ChartResponseVO.class);
+        //波动要求出其标准差Bad reviews中差评类型
         HashMap<String, List<Integer>> seriesData = chartResponseVO.getSeriesData();
         List<Integer> data1 = seriesData.get("data1");
         //平均值
@@ -189,14 +210,14 @@ public class MenberAnalysisServiceImpl implements MenberAnalysisService {
         }
         int svg=sum/(data1.size());
         //标准差分子
-        double molecular=1.0;
+        double molecular=0.0;
         for (Integer integer : data1) {
             molecular=molecular+Math.pow(integer-svg,2);
         }
         //标准差分母
-        double Denominator=molecular/data1.size();
+        double Denominator=molecular/(data1.size()-1);
         double standardDeviation = Math.sqrt(molecular / Denominator);
-        if (standardDeviation<0.4){
+        if (standardDeviation<3){
             result.append("用户数量变化稳定");
         }else {
             result.append("用户数量变化波动");
@@ -204,7 +225,7 @@ public class MenberAnalysisServiceImpl implements MenberAnalysisService {
         //上升还是下降 直接第一天和最后一天做差比较
         Integer start = data1.get(0);
         Integer end = data1.get(data1.size()-1);
-        Integer re=start-end;
+        Integer re=end-start;
         if (re>0){
             result.append("用户数量增加，继续提供新用户优惠活动");
         }else {

@@ -1,5 +1,5 @@
 server:
-  port: 10030
+  port: 10040
 #全局引用
 nacos:
   server:
