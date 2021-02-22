@@ -7,11 +7,13 @@ import com.mxw.analysis.mapper.TradeMapper;
 import com.mxw.common.model.entity.TradeDO;
 import com.mxw.common.model.entity.TradeEverydayDO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+@Component
 public class TradeEveryDayUtils {
 
     @Autowired

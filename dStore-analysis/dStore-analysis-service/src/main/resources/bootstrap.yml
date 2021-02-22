@@ -1,0 +1,36 @@
+server:
+  port: 10010
+#全局引用
+nacos:
+  server:
+    addr: 127.0.0.1:8848
+spring:
+  application:
+    name: dStore_analysis
+  cloud:
+    nacos:
+      discovery: #注册中心
+        server-addr: ${nacos.server.addr}
+        namespace: 3f930b18-1ae6-416a-8f75-460539fabc50
+        cluster-name: DEFAULT  #集群模式
+      config: #配置中心
+        server-addr: ${nacos.server.addr}
+        namespace: 3f930b18-1ae6-416a-8f75-460539fabc50
+        file-extension: yaml
+        group: DSTORE_GROUP
+dubbo:
+  scan:
+    base-packages: com.mxw #dubbo 服务扫描基准包
+  protocol:
+    name: dubbo
+    port: 20894
+  registry:
+    address: nacos://127.0.0.1:8848
+  application:
+    qos:
+      port: 22320 #dubbo qos 端口配置，命令行注入
+  consumer:
+    check: false
+    timeout: 3000
+    retries: -1
+

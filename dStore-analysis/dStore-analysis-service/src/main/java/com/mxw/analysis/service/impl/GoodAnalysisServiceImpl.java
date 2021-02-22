@@ -6,11 +6,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mxw.analysis.api.GoodAnalysisService;
 import com.mxw.analysis.mapper.GoodsEverydayMapper;
 import com.mxw.analysis.mapper.GoodsMapper;
+import com.mxw.analysis.utils.RedisUtils;
 import com.mxw.common.model.entity.GoodsDO;
 import com.mxw.common.model.entity.GoodsEverydayDO;
 import com.mxw.common.model.vo.ChartResponseVO;
 import com.mxw.common.model.vo.RadarDataVO;
-import com.mxw.common.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
