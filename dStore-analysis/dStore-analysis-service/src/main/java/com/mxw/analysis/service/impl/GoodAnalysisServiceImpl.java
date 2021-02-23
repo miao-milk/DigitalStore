@@ -102,6 +102,7 @@ public class GoodAnalysisServiceImpl implements GoodAnalysisService {
         ChartResponseVO chartResponseVO = new ChartResponseVO();
         List<String> xAxisData=new ArrayList<>();
         HashMap<String,List<Integer>> seriesData=new HashMap<>();
+        TreeSet<String> set=new TreeSet<>();
         //先获取当前用户的商品名
         QueryWrapper<GoodsDO> goodsQueryWrapper=new QueryWrapper();
         goodsQueryWrapper.eq("seller_id",sellerId);
@@ -110,17 +111,18 @@ public class GoodAnalysisServiceImpl implements GoodAnalysisService {
         List<String> goodsNames = goodsDOS.stream().map(good -> {
             return good.getGoodsName();
         }).collect(Collectors.toList());
-        //从每日销售记录表获取昨天记录
-        QueryWrapper<GoodsEverydayDO> goodsEverydayDOQueryWrapper = new QueryWrapper<>();
-        //从每日销售记录表获取昨天记录
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(Calendar.DATE, -7);
-        Date yesterday = calendar.getTime();
-        String oldTime = DateUtil.format(yesterday, "yyyy-MM-dd 00:00:00");
-        goodsEverydayDOQueryWrapper.ge("create_time", oldTime).eq("seller_id",sellerId);
+
         //查询每一个商品的销售额
         for (String goodsName : goodsNames) {
+            //从每日销售记录表获取昨天记录
+            QueryWrapper<GoodsEverydayDO> goodsEverydayDOQueryWrapper = new QueryWrapper<>();
+            //从每日销售记录表获取昨天记录
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.add(Calendar.DATE, -7);
+            Date yesterday = calendar.getTime();
+            String oldTime = DateUtil.format(yesterday, "yyyy-MM-dd 00:00:00");
+            goodsEverydayDOQueryWrapper.ge("create_time", oldTime).eq("seller_id",sellerId);
             ArrayList<Integer> saleVaues = new ArrayList<>();
             goodsEverydayDOQueryWrapper.eq("goods_name", goodsName);
             List<GoodsEverydayDO> goodsEverydayDOS = goodsEverydayMapper.selectList(goodsEverydayDOQueryWrapper);
@@ -128,11 +130,11 @@ public class GoodAnalysisServiceImpl implements GoodAnalysisService {
                 //获取一间商品近七天的销售额
                 Integer goodsBuyer = goodsEverydayDO.getGoodsBuyer();
                 saleVaues.add(goodsBuyer);
-                xAxisData.add(DateUtil.format(goodsEverydayDO.getCreateTime(), "MM-dd"));
+                set.add(DateUtil.format(goodsEverydayDO.getCreateTime(), "MM-dd"));
             }
             seriesData.put(goodsName,saleVaues);
         }
-
+        xAxisData.addAll(set);
         chartResponseVO.setXAxisData(xAxisData);
         chartResponseVO.setSeriesData(seriesData);
         String jsonString = JSONObject.toJSONString(chartResponseVO);

@@ -28,6 +28,7 @@ public class MAnalysisServiceImpl implements MAnalysisService {
         //获取近七天的用户购买金额
         //从每日销售记录表获取昨天记录
         ChartResponseVO chartResponseVO = new ChartResponseVO();
+        TreeSet<String> set=new TreeSet<>();
         List<String> xAxisData = new ArrayList<>();
         List<Integer> values = new ArrayList<>();
         HashMap<String, List<Integer>> seriesData = new HashMap<>();
@@ -42,9 +43,10 @@ public class MAnalysisServiceImpl implements MAnalysisService {
         List<TradeEverydayDO> tradeEverydayDO = tradeEverydayMapper.selectList(queryWrapper);
 
         tradeEverydayDO.stream().forEach(item -> {
-            xAxisData.add(DateUtil.format(item.getCreateTime(), "MM-dd"));
+            set.add(DateUtil.format(item.getCreateTime(), "MM-dd"));
             values.add(item.getDeal());
         });
+        xAxisData.addAll(set);
         seriesData.put("data", values);
         chartResponseVO.setXAxisData(xAxisData);
         chartResponseVO.setSeriesData(seriesData);
