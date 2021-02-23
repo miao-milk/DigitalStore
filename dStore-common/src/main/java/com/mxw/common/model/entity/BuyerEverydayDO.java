@@ -10,13 +10,17 @@ import java.util.List;
 
 @Data
 @TableName("buyer_everyday")
-public class BuyerEverydayDO {
+public class BuyerEverydayDO implements Comparable<BuyerEverydayDO>{
     @TableId
     private Integer id;
     private Integer sellerId;
     private Integer buyerId;
-    private Integer buyerPrice;
+    private Integer buyPrice;
     private String buyerName;
     private Date createTime;
 
+    @Override
+    public int compareTo(BuyerEverydayDO ob) {
+        return this.buyPrice.compareTo(ob.getBuyPrice());
+    }
 }

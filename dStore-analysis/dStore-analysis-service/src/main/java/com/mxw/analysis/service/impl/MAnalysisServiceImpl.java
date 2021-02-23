@@ -58,13 +58,16 @@ public class MAnalysisServiceImpl implements MAnalysisService {
         //获取当日消费最高的前五名
         HashMap<String, Integer> valuse = new HashMap<>();
         QueryWrapper<BuyerEverydayDO> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("seller_id", sellerId).eq("create_time", new Date());
+        queryWrapper.eq("seller_id", sellerId).ge("create_time", DateUtil.format(new Date(),"yyyy-MM-dd 00:00:00"));
         List<BuyerEverydayDO> buyerEverydayDOS = buyerEverydayMapper.selectList(queryWrapper);
         int max = 0;
-        Map<String, Integer> collect = buyerEverydayDOS.stream().sorted(Comparator.comparing(BuyerEverydayDO::getBuyerPrice)).limit(5).collect(Collectors.toMap(BuyerEverydayDO::getBuyerName, BuyerEverydayDO -> {
-            return BuyerEverydayDO.getBuyerPrice();
-        }));
-
+//        Map<String, Integer> collect = buyerEverydayDOS.stream().sorted(Comparator.comparing(BuyerEverydayDO::getBuyPrice)).limit(5).collect(Collectors.toMap(BuyerEverydayDO::getBuyerName, BuyerEverydayDO -> {
+//            return BuyerEverydayDO.getBuyPrice();
+//        }));
+        LinkedHashMap<String, Integer> collect =new LinkedHashMap<>();
+        buyerEverydayDOS.stream().sorted(Comparator.comparing(BuyerEverydayDO::getBuyPrice).reversed()).limit(5).forEach(item->{
+            collect.put(item.getBuyerName(),item.getBuyPrice());
+        });
         return collect;
     }
 }
