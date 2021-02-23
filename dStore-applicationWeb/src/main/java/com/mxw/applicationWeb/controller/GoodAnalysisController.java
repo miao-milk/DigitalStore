@@ -19,7 +19,7 @@ public class GoodAnalysisController {
     private GoodAnalysisService goodAnalysisService;
 
     @GetMapping("/getProductSalesCharacteristics")
-    @ApiOperation("获取商品销售特征雷达数据喜爱度")
+    @ApiOperation("获取商品销售特征雷达数据")
     public Result getProductSalesCharacteristics() {
         String sellerId="2";
         RadarDataVO radarDataVO=goodAnalysisService.getProductSalesCharacteristics(sellerId);

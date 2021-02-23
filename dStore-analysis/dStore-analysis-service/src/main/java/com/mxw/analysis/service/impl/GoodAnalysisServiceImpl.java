@@ -10,12 +10,15 @@ import com.mxw.analysis.utils.RedisUtils;
 import com.mxw.common.model.entity.GoodsDO;
 import com.mxw.common.model.entity.GoodsEverydayDO;
 import com.mxw.common.model.vo.ChartResponseVO;
+import com.mxw.common.model.vo.NewOldBuyerCompareVO;
 import com.mxw.common.model.vo.RadarDataVO;
+import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class GoodAnalysisServiceImpl implements GoodAnalysisService {
 
     @Autowired
@@ -29,11 +32,11 @@ public class GoodAnalysisServiceImpl implements GoodAnalysisService {
     public RadarDataVO getProductSalesCharacteristics(String sellerId) {
         RadarDataVO radarDataVO = new RadarDataVO();
         //销售特征
-         List<String> indicators=new ArrayList<>();
+         Set<String> indicators=new HashSet<>();
         //销售特征值
          HashMap<String,List<Integer>> seriesDataList=new HashMap<>();
         //喜爱特征
-         List<String> favoriteFeature=new ArrayList<>();
+         Set<String> favoriteFeature=new HashSet<>();
         //喜爱特征值
          HashMap<String,List<Integer>> favoriteFeatureDataList=new HashMap<>();
          //查询出当前用户下的全部商品标题名
@@ -47,24 +50,42 @@ public class GoodAnalysisServiceImpl implements GoodAnalysisService {
 
         //当日销售特征值
         QueryWrapper<GoodsEverydayDO> goodsEverydayQueryWrapper=new QueryWrapper();
-        goodsEverydayQueryWrapper.eq("seller_id", sellerId).eq("create_time", new Date()).in("goods_name",legendTitle);
+        //从每日销售记录表获取昨天记录
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DATE, -1);
+        Date yesterday = calendar.getTime();
+        String oldTime = DateUtil.format(yesterday, "yyyy-MM-dd 00:00:00");
+        goodsEverydayQueryWrapper.eq("seller_id", sellerId).ge("create_time", oldTime).in("goods_name",legendTitle);
         List<GoodsEverydayDO> goodsEverydayDOS = goodsEverydayMapper.selectList(goodsEverydayQueryWrapper);
         for (GoodsEverydayDO goodsEverydayDO : goodsEverydayDOS) {
-            List<GoodsEverydayDO.GoodsFeture> goodsSalesFetures = goodsEverydayDO.getGoodsSalesFetures();
-            List<GoodsEverydayDO.GoodsFeture> goodsLikeFetures = goodsEverydayDO.getGoodsLikeFetures();
+            //List<GoodsEverydayDO.GoodsFeture> goodsSalesFetures = goodsEverydayDO.getGoodsSalesFetures();
+            //List<GoodsEverydayDO.GoodsFeture> goodsLikeFetures = goodsEverydayDO.getGoodsLikeFetures();
+            String goodsSalesFetures = goodsEverydayDO.getGoodsSalesFetures();
+            String goodsLikeFetures = goodsEverydayDO.getGoodsLikeFetures();
+            List goodsSalesFeturesList = JSONObject.parseObject(goodsSalesFetures,List.class);
+            List goodsLikeFeturesList = JSONObject.parseObject(goodsLikeFetures,List.class);
             //销售特征
             ArrayList<Integer> values = new ArrayList<>();
-            for (GoodsEverydayDO.GoodsFeture goodsDO : goodsSalesFetures) {
-                indicators.add(goodsDO.getFetureName());
-                values.add(goodsDO.getPeopleNum());
+            for (Object o : goodsSalesFeturesList) {
+                Map map=(Map) o;
+                Set set = map.keySet();
+                Collection values1 = map.values();
+                indicators.addAll(set);
+                values.addAll(values1);
             }
+            seriesDataList.put(goodsEverydayDO.getGoodsName(),values);
             //喜爱特征
             ArrayList<Integer> likeValues = new ArrayList<>();
-            for (GoodsEverydayDO.GoodsFeture goodsDO : goodsLikeFetures) {
-                favoriteFeature.add(goodsDO.getFetureName());
-                likeValues.add(goodsDO.getPeopleNum());
+            for (Object o  : goodsLikeFeturesList) {
+                Map map=(Map) o;
+                Set set = map.keySet();
+                Collection values1 = map.values();
+                //GoodsEverydayDO.GoodsFeture goodsDO=JSONObject.parseObject(string, GoodsEverydayDO.GoodsFeture.class);
+                favoriteFeature.addAll(set);
+                likeValues.addAll(values1);
             }
-            favoriteFeatureDataList.put(goodsEverydayDO.getGoodsName(),values);
+            favoriteFeatureDataList.put(goodsEverydayDO.getGoodsName(),likeValues);
         }
 
         radarDataVO.setLegendTitle(legendTitle);

@@ -9,11 +9,13 @@ import com.mxw.analysis.mapper.TradeEverydayMapper;;
 import com.mxw.common.model.entity.BuyerEverydayDO;
 import com.mxw.common.model.entity.TradeEverydayDO;
 import com.mxw.common.model.vo.ChartResponseVO;
+import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class MAnalysisServiceImpl implements MAnalysisService {
 
     @Autowired
