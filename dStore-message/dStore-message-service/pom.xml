@@ -27,12 +27,12 @@
             <artifactId>commons-httpclient</artifactId>
             <version>3.1</version>
         </dependency>
-        <!-- /http所需包 -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>5.0.8.RELEASE</version>
-        </dependency>
+<!--        &lt;!&ndash; /http所需包 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework</groupId>-->
+<!--            <artifactId>spring-tx</artifactId>-->
+<!--            <version>5.0.8.RELEASE</version>-->
+<!--        </dependency>-->
     </dependencies>
 
 </project>

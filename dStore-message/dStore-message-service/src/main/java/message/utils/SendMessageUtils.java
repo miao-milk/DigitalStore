@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class SendMessageUtils {
-    public static boolean send(String content,
+    public  boolean send(String content,
                                String mobiles,
                                String urlStr,
                                String usernameStr,
