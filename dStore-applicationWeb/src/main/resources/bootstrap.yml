@@ -19,7 +19,7 @@ spring:
         server-addr: ${nacos.server.addr}
         namespace: 3f930b18-1ae6-416a-8f75-460539fabc50
         file-extension: yaml
-        group: dStore_GROUP
+        group: DSTORE_GROUP
   servlet:  #SprigMvc上传文件配置
     multipart:
       enabled: true #默认支持文件上传
