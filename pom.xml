@@ -20,6 +20,7 @@
         <module>dStore-security</module>
         <module>dStore-user</module>
         <module>dStore-send</module>
+        <module>dStore-pay</module>
     </modules>
     <!-->全部都为spring项目，父工程继承与springboot<-->
     <parent>

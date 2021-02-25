@@ -1,0 +1,21 @@
+package com.mxw.pay.config;
+
+public class AlipayConfig {
+
+    public static final String APP_ID = "2021000117615078";
+    public static final String APP_PRIVATE_KEY = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCNUenpPBImmkL4CBC99iLWm8FkENqD8E45OKjGjpydBYPiaots9QGb6jW2E586kbp8cywAn8sOX49kfZw3ftsEGEO48+XT3lO0meUlH+pwB+FFAjmRgEhzHvAoWk9KzbA1Lgd5rGrZag4q+ZhylMZT/dFspyLTyUShRFj5Lfxx7F5uU5nEND3P5oVzaQnJAbQkkgU1kWmMxvvjZffAh4Fhs0ExgODMchsuzWFvIrDG6Jy6C5GVDD12tVZi+4FfSL9CHPtvj/rnjsrbhhBmD9sC4tTv5+xW2JfSV9uyQMUBPCSZ2PzOy+ywaozAuMAvTbobj3ZytE60GNmvrc2tfVD7AgMBAAECggEAZd4bF7Xme48NIQ9nShdHq50gvUnsydiJ+nNeLaqVOBbGp4oXsNW3cDVWvEXOrIBphdXbbSPCUj0N9ukYl2RI6d23y3V8QMntWqzoYWdtLY5wkrb02m43S0yM3vmiWJCGKP9iAhIH/2qUhePfQRD/GYJH2ONtlm5pmznSTOQaKd+ejgVqW4DSMR86TjaRUkx7LGsKhlYm0z9F5GVZerYQjMSsB9ayo1lwVWdVWobweoZ4+PBjbKgUrhEMRKyA8V7cuaFRPbV6Hkzi3cZRgTGbET57S0oUhti4lB2Hr+8gpVd4uhiI3lVZ3pVe3qyVKb0YdYbKO53kpJXOIPXlh0GvYQKBgQDMiDwUZ+mJnXoQtNgMo/9S/QhBGqNAFIaWHSeQTO64v2inXzNipJaaeQQ1vT5c1mOPskRpVcg5ZE0a5YVhjz8mO4C6+yUGkgVgXLRi2wEcW7n3BIL0HEHkVn4FS4TC8rQAHjxUENj26D/cRPx2PNGACeh2HJVYVqeF1GZyjECLKwKBgQCw4ZxKU32H0icH12Lb9vF5mwm7KsyJPOmo8eivy4+TTQQ4PmtIs8PrwL1N6U4jwalmJNq+uOdaru6AykAMyB8RQUbF2AVcC2jzIedMXHFMj8uWGjqe+PlMQ14tLzZNJql9pPUprW+lL2XXSeka5GDONfa/uoeBNWYr3Y35WSIpcQKBgQCfgE56C18QNoKOrLkfgnUGntTlEITm4Brkze+glJ5F7N8MRy2na3sXE/C4h9AuTfJuiTLYglEWkKWgqAUQQ8mXYyfMqTYCnbUbpK/3t5pyJwYrIJWPEMpB60Fzl6T88pB01x9s34aTZiMG/7Vx75PhKdji4v+EWG9j6nPKOJ3M6QKBgAu9jeApFoXzXv/YPgmXpIOL1OOFfboGPwQlumogutDuJb+N9RUISZLWYjpPqA4bhqDvBU3ve/u67L3DruiqR9WfXZE4O3LWlwq8T1v0LtkEGmFGMGno4LM9LX0WSyZn0Iw0bMltZ6GxObNGhqBwVDSbxFsJiID9CGEU/Z11Wx0hAoGBALxSAAmxqXhlcyCYj1cJGZBelAK7jgpMm8HxSZUkNRSBYEVFA+xTwhfc4WZyWoBOnmoux8qwi1MjK8R25WYNfYAOVreshKBxcSPjrBaGxupQFywggTP9mvva853hm1BeHlqCJyYxdZTt841jtJ/4KN9LtziXSSzRb5VGmVokKx9F";
+
+    public static final String CHARSET = "UTF-8";
+    public static final String ALIPAY_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArFd0jGzrwUN6TS4sOcayiyNkHvIo90QnpLwICILMaC6zyPOJLnzEpVGaP11SITMfP+7XPkmxpSzCvOT9BQSh4tr4DsRLijtKCFoH415TlzCBzFQOYzCljnd8p5VXY64sufrqPTVPQVgEG0OdyYrCxvU2/G+coDEdGmbCtXtTGgEtCKtJxQBFgV5FkEppvAYfWcT+UupOTNTzkisdNo0IAWrmUMWr5/pKRbQZFDOdmCxkddG4kbCw72L8B/JAIwmg6fzXRw09QQfkt4WmOkyjM8Y2wvtRpLEhESita87OKVKvBPGTxLdIq0g9xOBFqd+qVGw5G62o7JA2sBdnwAh1wwIDAQAB";
+
+    //这是沙箱接口路径,正式路径为https://openapi.alipay.com/gateway.do
+    public static final String GATEWAY_URL ="https://openapi.alipaydev.com/gateway.do";
+    public static final String FORMAT = "JSON";
+    //签名方式
+    public static final String SIGN_TYPE = "RSA2";
+    //支付宝异步通知路径,付款完毕后会异步调用本项目的方法,必须为公网地址
+    public static final String NOTIFY_URL = "http://127.0.0.1:8080/notifyUrl";
+    //支付宝同步通知路径,也就是当付款完毕后跳转本项目的页面,可以不是公网地址
+    public static final String RETURN_URL = "http://127.0.0.1:8080/returnUrl";
+
+}
