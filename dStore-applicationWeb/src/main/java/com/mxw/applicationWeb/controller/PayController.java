@@ -1,31 +1,44 @@
-package com.mxw.pay.controller;
+package com.mxw.applicationWeb.controller;
 
-
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
-import com.mxw.pay.config.AlipayConfig;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import com.mxw.applicationWeb.config.AlipayConfig;
+import com.mxw.common.model.dto.PayDTO;
+import com.mxw.common.model.dto.UserDTO;
+import com.mxw.common.utils.Result;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.UUID;
 
 
+@Api(value = "充值", tags = "充值", description = "充值")
 @RestController
 public class PayController {
 
 
+    @GetMapping("/pay")
+    @ApiOperation("充值")
+    public Result alipay(@RequestParam  String params) throws IOException {
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
-    @RequestMapping("aliapy")
-    public void alipay(HttpServletResponse httpResponse) throws IOException {
-
+        HttpServletResponse httpResponse=servletRequestAttributes.getResponse();
+        PayDTO payDTO = JSONObject.parseObject(params, PayDTO.class);
         SecureRandom r= new SecureRandom();
         //实例化客户端,填入所需参数
         AlipayClient alipayClient = new DefaultAlipayClient(AlipayConfig.GATEWAY_URL, AlipayConfig.APP_ID, AlipayConfig.APP_PRIVATE_KEY, AlipayConfig.FORMAT, AlipayConfig.CHARSET, AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.SIGN_TYPE);
@@ -38,11 +51,11 @@ public class PayController {
         //生成随机Id
         String out_trade_no = UUID.randomUUID().toString();
         //付款金额，必填
-        String total_amount =Integer.toString(100);
+        String total_amount =Double.toString(payDTO.getFee());
         //订单名称，必填
-        String subject ="奥迪A8 2021款 A8L 60 TFSl quattro豪华型";
+        String subject ="营销短信充值"+payDTO.getTotal()+"条";
         //商品描述，可空
-        String body = "尊敬的会员欢迎购买奥迪A8 2021款 A8L 60 TFSl quattro豪华型";
+        String body = "营销短信充值";
         request.setBizContent("{\"out_trade_no\":\""+ out_trade_no +"\","
                 + "\"total_amount\":\""+ total_amount +"\","
                 + "\"subject\":\""+ subject +"\","
@@ -54,15 +67,16 @@ public class PayController {
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
-        httpResponse.setContentType("text/html;charset=" + AlipayConfig.CHARSET);
-        httpResponse.getWriter().write(form);// 直接将完整的表单html输出到页面
-        httpResponse.getWriter().flush();
-        httpResponse.getWriter().close();
+        return Result.ok().put("data",form);
+//        httpResponse.setContentType("text/html;charset=" + AlipayConfig.CHARSET);
+//        httpResponse.getWriter().write(form);// 直接将完整的表单html输出到页面
+//        httpResponse.getWriter().flush();
+//        httpResponse.getWriter().close();
     }
 
 
     @RequestMapping(value = "/returnUrl", method = RequestMethod.GET)
-    public String returnUrl(HttpServletRequest request, HttpServletResponse response)
+    public Result returnUrl(HttpServletRequest request, HttpServletResponse response)
             throws IOException, AlipayApiException {
         System.out.println("=================================同步回调=====================================");
 
@@ -100,11 +114,10 @@ public class PayController {
 
             //支付成功，修复支付状态
             //payService.updateById(Integer.valueOf(out_trade_no));
-            return "ok";//跳转付款成功页面
+            return Result.ok().put("data","StrategyList");//跳转付款成功页面
         }else{
-            return "no";//跳转付款失败页面
+            return Result.ok().put("data","StrategyList");//跳转付款失败页面
         }
 
     }
-
 }

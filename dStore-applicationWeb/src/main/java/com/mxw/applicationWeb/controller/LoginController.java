@@ -44,7 +44,7 @@ public class LoginController {
                 UserVO userVO = new UserVO();
                 userVO.setUserName(userName);
                 userVO.setToken(String.valueOf(subject.getSession().getId()));
-                    return Result.ok("登录成功").put("data", userVO);
+                return Result.ok("登录成功").put("data", userVO);
             } catch (UnknownAccountException e) {
                 throw new MyException(CommonErrorCode.ERROR_CODE_10002);
             } catch (IncorrectCredentialsException e) {
