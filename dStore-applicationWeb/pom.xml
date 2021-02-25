@@ -47,10 +47,18 @@
 
 
         <dependency>
+            <groupId>com.mxw.DigitalStore</groupId>
+            <artifactId>dStore-message-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring-boot-starter</artifactId>
             <version>1.5.3</version>
         </dependency>
+
+
     </dependencies>
 
 </project>

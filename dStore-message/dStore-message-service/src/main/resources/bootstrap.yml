@@ -1,14 +1,12 @@
 server:
-  port: 18080
-
+  port: 10010
 #全局引用
 nacos:
   server:
     addr: 127.0.0.1:8848
-
 spring:
   application:
-    name: dStore-applicationWeb
+    name: dStore_message
   cloud:
     nacos:
       discovery: #注册中心
@@ -20,19 +18,12 @@ spring:
         namespace: 3f930b18-1ae6-416a-8f75-460539fabc50
         file-extension: yaml
         group: DSTORE_GROUP
-  servlet:  #SprigMvc上传文件配置
-    multipart:
-      enabled: true #默认支持文件上传
-      file-size-threshold: 0 #支持文件写入磁盘
-      location:  #上传文件的临时目录
-      max-file-size: 2MB #最大支持文件大小
-      max-request-size: 30MB #最大支持请求大小
 dubbo:
   scan:
     base-packages: com.mxw #dubbo 服务扫描基准包
   protocol:
     name: dubbo
-    port: 20891
+    port: 20894
   registry:
     address: nacos://127.0.0.1:8848
   application:
@@ -42,9 +33,9 @@ dubbo:
     check: false
     timeout: 3000
     retries: -1
-#
-##日志配置
-#logging:
-#  config: classpath:log4j2.xml
 mybatis-plus:
-  mapper-locations: classpath*:mapper/**.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath*:/mapper/**.xml
+
