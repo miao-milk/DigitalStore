@@ -1,7 +1,9 @@
 package com.mxw.applicationWeb.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mxw.applicationWeb.utils.ShiroUtils;
 import com.mxw.common.exception.MyException;
+import com.mxw.common.model.dto.UserDTO;
 import com.mxw.common.model.entity.ShopBuyerDO;
 import com.mxw.common.model.vo.LabelVO;
 import com.mxw.common.model.vo.MemberConsumptionLevelVO;
@@ -10,6 +12,7 @@ import com.mxw.common.utils.Result;
 import com.mxw.analysis.api.MemberService;;
 import io.swagger.annotations.*;
 import org.apache.dubbo.config.annotation.Reference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,11 +23,14 @@ public class MemberMessageController {
 
     @Reference
     private MemberService memberService;
+    @Autowired
+    ShiroUtils shiroUtils;
 
     @GetMapping("/allMember")
     @ApiOperation("查找全部用户")
     public Result queryAllMember() {
-        String sellerId="2";
+        UserDTO user = shiroUtils.getUser();
+        String sellerId=user.getSellerId();
         PageVO<ShopBuyerDO> shopBuyerDTOS = memberService.queryShopBuyer(sellerId);
         return Result.ok("分页条件查找用户成功").put("data", shopBuyerDTOS.getItems()).put("count",shopBuyerDTOS.getCounts());
     }
@@ -68,7 +74,8 @@ public class MemberMessageController {
     @ApiOperation("添加一个用户下的标签")
     @GetMapping("/addLabel/{shopBuyerId}")
     public Result addLabelByshopBuyerId(@ApiParam("用户id") @PathVariable String shopBuyerId,@ApiParam("标签内容") @RequestParam String labelContent) throws MyException {
-        String sellerId="2";
+        UserDTO user = shiroUtils.getUser();
+        String sellerId=user.getSellerId();
         memberService.addLabelByshopBuyerId(sellerId,shopBuyerId,labelContent);
         return Result.ok("返回用户标签成功");
     }
@@ -79,7 +86,8 @@ public class MemberMessageController {
     @ApiOperation("删除一个用户下的标签")
     @GetMapping("/deleteLabel/{shopBuyerId}")
     public Result deleteLabelByshopBuyerId(@ApiParam("用户id") @PathVariable String shopBuyerId,@ApiParam("标签内容") @RequestParam String labelContent) throws MyException {
-        String sellerId="2";
+        UserDTO user = shiroUtils.getUser();
+        String sellerId=user.getSellerId();
         memberService.deleteLabelByshopBuyerId(sellerId,shopBuyerId,labelContent);
         return Result.ok("删除用户标签成功");
     }
@@ -87,7 +95,8 @@ public class MemberMessageController {
     @GetMapping("/MemberConsumptionLevel")
     @ApiOperation("查找用户消费等级")
     public Result queryMemberConsumptionLevel() {
-        String sellerId="2";
+        UserDTO user = shiroUtils.getUser();
+        String sellerId=user.getSellerId();
         MemberConsumptionLevelVO memberConsumptionLevelVO=memberService.queryMemberConsumptionLevel(sellerId);
         return Result.ok("查找用户消费等级成功").put("data",memberConsumptionLevelVO);
     }

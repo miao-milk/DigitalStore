@@ -1,11 +1,14 @@
 package com.mxw.applicationWeb.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mxw.applicationWeb.utils.ShiroUtils;
+import com.mxw.common.model.dto.UserDTO;
 import com.mxw.common.model.entity.LabelDO;
 import com.mxw.common.utils.Result;
 import com.mxw.analysis.api.LabelService;
 import io.swagger.annotations.*;
 import org.apache.dubbo.config.annotation.Reference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +19,8 @@ public class MemberLabelController {
 
     @Reference
     private LabelService labelService;
+    @Autowired
+    ShiroUtils shiroUtils;
 
     /**
      * 查询该用户下标签库列表
@@ -23,7 +28,8 @@ public class MemberLabelController {
     @GetMapping("/allLabel")
     @ApiOperation("查询标签库列表")
     public Result allLabel() {
-        String sellerId="2";
+        UserDTO user = shiroUtils.getUser();
+        String sellerId=user.getSellerId();
         List<LabelDO> labelList = labelService.queryallLabel(sellerId);
         return Result.ok("查询标签库成功").put("data", labelList).put("count",labelList.size());
     }
@@ -58,7 +64,8 @@ public class MemberLabelController {
     @ApiOperation("新增标签到标签库内容")
     @GetMapping("/addLabel")
     public Result addLabel(@ApiParam("标签内容") @RequestParam String labelContent) {
-        String sellerId="2";
+        UserDTO user = shiroUtils.getUser();
+        String sellerId=user.getSellerId();
         labelService.addLabel(sellerId,labelContent);
         return Result.ok("新增标签成功");
     }

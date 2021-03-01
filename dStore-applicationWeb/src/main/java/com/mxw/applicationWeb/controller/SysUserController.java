@@ -1,6 +1,7 @@
 package com.mxw.applicationWeb.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mxw.applicationWeb.utils.ShiroUtils;
 import com.mxw.common.model.dto.UserDTO;
 import com.mxw.common.model.dto.UserInfoDTO;
 import com.mxw.common.model.entity.UserInfoDO;
@@ -9,6 +10,7 @@ import com.mxw.common.utils.UpPhotoNameUtils;
 import com.mxw.user.api.UserService;
 import io.swagger.annotations.*;
 import org.apache.dubbo.config.annotation.Reference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +34,8 @@ public class SysUserController {
 
     @Reference
     UserService userService;
+    @Autowired
+    ShiroUtils shiroUtils;
 
 
     @PostMapping("/register")
@@ -92,7 +96,8 @@ public class SysUserController {
             @ApiImplicitParam(name = "UserInfoDO", value = "用户详情信息", dataType = "UserDTO", paramType = "body"),
     })
     public Result saveUserInfo(@RequestBody @ApiParam(name="用户对象",value="传入json格式",required=true) String params){
-        String sellerId="2";
+        UserDTO user = shiroUtils.getUser();
+        String sellerId=user.getSellerId();
         UserInfoDTO userInfoDTO = JSONObject.parseObject(params, UserInfoDTO.class);
         userService.saveUserInfo(userInfoDTO,sellerId);
         return Result.ok("修改成功");
@@ -102,7 +107,8 @@ public class SysUserController {
     @GetMapping("/getUserInfo")
     @ApiOperation("获取用户信息")
     public Result getUserInfo(){
-        String sellerId="2";
+        UserDTO user = shiroUtils.getUser();
+        String sellerId=user.getSellerId();
         UserInfoDTO userInfoDTO= userService.getUserInfo(sellerId);
         return Result.ok("获取用户详情").put("data",userInfoDTO);
     }

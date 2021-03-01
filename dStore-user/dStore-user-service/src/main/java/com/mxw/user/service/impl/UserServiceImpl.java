@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         User user = userMapper.selectOne(wrapper.eq("username", userName));
         UserDTO userDTO = BeanUtil.copyProperties(user, UserDTO.class);
+        userDTO.setSellerId(String.valueOf(user.getId()));
         userDTO.setSalt(user.getSalt());
         return userDTO;
     }

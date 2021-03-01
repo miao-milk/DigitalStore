@@ -1,6 +1,8 @@
 package com.mxw.applicationWeb.controller;
 
 
+import com.mxw.applicationWeb.utils.ShiroUtils;
+import com.mxw.common.model.dto.UserDTO;
 import com.mxw.common.model.entity.ShopBuyerDO;
 import com.mxw.common.model.vo.GroupDetailVO;
 import com.mxw.common.model.vo.GroupVO;
@@ -11,6 +13,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.dubbo.config.annotation.Reference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +26,8 @@ public class MemberGroupController {
 
     @Reference
     private GroupService groupService;
+    @Autowired
+    ShiroUtils shiroUtils;
 
     /**
      * 查询分组列表
@@ -31,7 +36,8 @@ public class MemberGroupController {
     @ApiOperation("查询分组列表")
     public Result getGroupTree() {
         //查询该用户下的分组列表
-        String sellerId="2";
+        UserDTO user = shiroUtils.getUser();
+        String sellerId=user.getSellerId();
         List<GroupVO> labelList = groupService.getGroupTree(sellerId);
         return Result.ok("查询标签库成功").put("data", labelList).put("count",labelList.size());
     }
@@ -46,7 +52,8 @@ public class MemberGroupController {
             @ApiImplicitParam(name = "pid", value = "父id", dataType = "String", paramType = "query")
     })
     public Result addGroup(@RequestParam String content, @RequestParam String pid) {
-        String sellerId="2";
+        UserDTO user = shiroUtils.getUser();
+        String sellerId=user.getSellerId();
         groupService.addGroup(sellerId,content,pid);
         return Result.ok("添加成功");
     }
@@ -61,7 +68,8 @@ public class MemberGroupController {
             @ApiImplicitParam(name = "id", value = "id", dataType = "String", paramType = "query")
     })
     public Result editGroup(@RequestParam String content, @RequestParam String id) {
-        String sellerId="2";
+        UserDTO user = shiroUtils.getUser();
+        String sellerId=user.getSellerId();
         groupService.editGroup(sellerId,content,id);
         return Result.ok("修改成功");
     }
@@ -76,7 +84,8 @@ public class MemberGroupController {
            @ApiImplicitParam(name = "id", value = "id", dataType = "String", paramType = "query")
     })
     public Result deleteGroup(@RequestParam String id) {
-        String sellerId="2";
+        UserDTO user = shiroUtils.getUser();
+        String sellerId=user.getSellerId();
         groupService.deleteGroup(sellerId,id);
         return Result.ok("删除成功");
     }
@@ -92,7 +101,8 @@ public class MemberGroupController {
     })
     public Result getGroupMember(@RequestParam String id) {
         //查询该用户下的分组列表
-        String sellerId="2";
+        UserDTO user = shiroUtils.getUser();
+        String sellerId=user.getSellerId();
         List<ShopBuyerDO> labelList = groupService.getGroupMember(sellerId,id);
         return Result.ok("查询分组人群列表成功").put("data", labelList).put("count",labelList.size());
     }
@@ -122,7 +132,8 @@ public class MemberGroupController {
     })
     public Result getGroupDetail(@RequestParam String id) {
         //查询该用户下的分组列表
-        String sellerId="2";
+        UserDTO user = shiroUtils.getUser();
+        String sellerId=user.getSellerId();
         GroupDetailVO groupDetailVO= groupService.getGroupDetail(sellerId,id);
         return Result.ok("查询标签库成功").put("data", groupDetailVO);
     }

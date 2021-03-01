@@ -18,6 +18,11 @@ public class UserDTO implements Serializable {
     private String userName;
 
     /**
+     * 用户seller
+     */
+    private String sellerId;
+
+    /**
      * 用户密码
      */
     private String password;

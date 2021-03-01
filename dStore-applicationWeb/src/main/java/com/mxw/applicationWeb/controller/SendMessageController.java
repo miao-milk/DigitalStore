@@ -3,6 +3,8 @@ package com.mxw.applicationWeb.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mxw.analysis.api.MemberService;
+import com.mxw.applicationWeb.utils.ShiroUtils;
+import com.mxw.common.model.dto.UserDTO;
 import com.mxw.common.model.entity.MessageDO;
 import com.mxw.common.model.entity.ShopBuyerDO;
 import com.mxw.common.model.vo.PageVO;
@@ -13,6 +15,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.dubbo.config.annotation.Reference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,12 +26,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class SendMessageController {
     @Reference
     private SendMessageService sendMessageService;
+    @Autowired
+    ShiroUtils shiroUtils;
 
 
     @GetMapping("/getAllMessage")
     @ApiOperation("查找全部信息记录")
     public Result getAllMessage() {
-        String sellerId="2";
+        UserDTO user = shiroUtils.getUser();
+        String sellerId=user.getSellerId();
         PageVO<MessageDO> allMessageRecord = sendMessageService.getAllMessageRecord(sellerId);
         return Result.ok("分页条件查找信息成功").put("data", allMessageRecord.getItems()).put("count",allMessageRecord.getCounts());
     }

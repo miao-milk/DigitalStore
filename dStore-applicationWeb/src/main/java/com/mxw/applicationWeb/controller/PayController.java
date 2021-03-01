@@ -7,12 +7,14 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.mxw.applicationWeb.config.AlipayConfig;
+import com.mxw.applicationWeb.utils.ShiroUtils;
 import com.mxw.common.model.dto.PayDTO;
 import com.mxw.common.model.dto.UserDTO;
 import com.mxw.common.utils.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -30,6 +32,9 @@ import java.util.UUID;
 @Api(value = "充值", tags = "充值", description = "充值")
 @RestController
 public class PayController {
+
+    @Autowired
+    ShiroUtils shiroUtils;
 
 
     @GetMapping("/pay")
