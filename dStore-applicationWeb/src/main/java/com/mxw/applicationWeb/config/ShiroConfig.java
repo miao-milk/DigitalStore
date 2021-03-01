@@ -51,6 +51,7 @@ public class ShiroConfig {
         //表示可以访问的swagger文档路径
         map.put("/swagger-ui.html", "anon");
         map.put("/notifyUrl", "anon");
+        map.put("/getImage/**", "anon");
         map.put("/swagger-resources/**", "anon");
         map.put("/swagger-resources", "anon");
         map.put("/v2/api-docs", "anon");

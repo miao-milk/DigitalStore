@@ -108,9 +108,31 @@ public class PayController {
             // 付款金额
             String total_amount = new String(request.getParameter("total_amount").getBytes("ISO-8859-1"), "UTF-8");
 
+            double value = Double.parseDouble(total_amount);
+            //充值条数
+            String total_message = new String();
+
+            if (32900 <= value) {
+                total_message =String.valueOf( Math.floor((value * 100) / 4.7));
+            } else if (9800 <= value && value < 34300) {
+                total_message = String.valueOf(Math.floor((value * 100) / 4.9));
+            } else if (4160 <= value && value < 10400) {
+                total_message =String.valueOf( Math.floor((value * 100) / 5.2));
+            } else if (2700 <= value && value < 4320) {
+                total_message= String.valueOf(Math.floor((value * 100) / 5.4));
+            } else if (1375 <= value && value < 2750) {
+                total_message =String.valueOf( Math.floor((value * 100) / 5.5));
+            } else if (672 <= value && value < 1400) {
+                total_message= String.valueOf(Math.floor((value * 100) / 5.6));
+            } else if (285 <= value && value < 684) {
+                total_message= String.valueOf(Math.floor((value * 100) / 5.7));
+            } else if (5.8 <= value && value < 290) {
+                total_message = String.valueOf(Math.floor((value * 100) / 5.8));
+            }
             System.out.println("商户订单号="+out_trade_no);
             System.out.println("支付宝交易号="+trade_no);
             System.out.println("付款金额="+total_amount);
+            System.out.println("充值短信条数="+total_message);
 
             //支付成功，修复支付状态
             //payService.updateById(Integer.valueOf(out_trade_no));
