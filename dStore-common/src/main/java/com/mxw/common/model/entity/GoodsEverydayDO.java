@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
@@ -27,6 +28,7 @@ public class GoodsEverydayDO {
 
     @Data
     @AllArgsConstructor
+    @NoArgsConstructor
     public  static class GoodsFeture{
         private String fetureName;
         private Integer peopleNum;

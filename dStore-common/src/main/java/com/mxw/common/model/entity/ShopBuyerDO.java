@@ -154,5 +154,10 @@ public class ShopBuyerDO implements Serializable {
 	 */
 	private Date buyerLastSucceedTime;
 
+	/**
+	 * 创建时间
+	 */
+	private Date createTime;
+
 
 }
