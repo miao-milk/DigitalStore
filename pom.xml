@@ -15,11 +15,11 @@
         <module>dStore-common</module>
         <module>dStore-analysis</module>
         <module>dStore-applicationWeb</module>
-        <module>dStore-gateway</module>
         <module>dStore-member</module>
         <module>dStore-security</module>
         <module>dStore-user</module>
         <module>dStore-send</module>
+        <module>dStore-job</module>
 
     </modules>
     <!-->全部都为spring项目，父工程继承与springboot<-->

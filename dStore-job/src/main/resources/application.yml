@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    password: root
+    username: root
+    url: jdbc:mysql://101.37.158.206:3306/dStore_trade
+  application:
+    name: dStore_job
+mybatis-plus:
+  mapper-locations: classpsth:/mapper/**/*.xml
+  global-config:
+    db-config:
+      id-type: auto

@@ -16,7 +16,7 @@ import java.util.Date;
  * @date 2020-12-10 15:00:54
  */
 @Data
-@TableName("shop_buyer")
+@TableName("buyer")
 public class ShopBuyerDO implements Serializable {
 	private static final long serialVersionUID = 3L;
 
@@ -153,26 +153,6 @@ public class ShopBuyerDO implements Serializable {
 	 * 最后交易成功时间
 	 */
 	private Date buyerLastSucceedTime;
-	/**
-	 * 短信营销次数
-	 */
-	private Integer smsMarketingCount;
-	/**
-	 * 最后发送短信时间
-	 */
-	private Date lastSendTime;
-	/**
-	 * 复购周期（天）
-	 */
-	private Integer afterPeriod;
 
-	/**
-	 * 是否黑名单 0:否 1：是
-	 */
-	private Integer isBlacklist;
-	/**
-	 * 创建时间
-	 */
-	private Date createTime;
 
 }
