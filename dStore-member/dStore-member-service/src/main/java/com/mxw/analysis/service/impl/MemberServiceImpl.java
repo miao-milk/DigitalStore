@@ -3,6 +3,7 @@ package com.mxw.analysis.service.impl;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.mxw.analysis.api.ShopService;
 import com.mxw.common.enumCode.CommonErrorCode;
 import com.mxw.common.exception.MyException;
 import com.mxw.common.model.dto.BuyerLabelDTO;
@@ -17,6 +18,7 @@ import com.mxw.analysis.mapper.BuyerLabelLinkMapper;
 import com.mxw.analysis.mapper.LabelMapper;
 import com.mxw.analysis.mapper.ShopMapper;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.dubbo.config.annotation.Reference;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -36,30 +38,26 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     BuyerLabelLinkMapper buyerLabelLinkMapper;
 
+    @Reference
+    ShopService shopService;
+
+
     @Override
     public PageVO<ShopBuyerDO> queryShopBuyer(String sellerId) {
-        QueryWrapper<ShopBuyerDO> wrapper = new QueryWrapper<ShopBuyerDO>().eq("seller_id", sellerId);
-        List<ShopBuyerDO> shopBuyers = shopMapper.selectList(wrapper);
+        List<ShopBuyerDO> shopBuyers = shopService.queryShopBuyer(sellerId);
         return new PageVO<ShopBuyerDO>(shopBuyers.size(), 0, 0, shopBuyers);
     }
 
     @Override
     public PageVO<ShopBuyerDO> queryShopBuyerByPage(ShopBuyerDO shopBuyerDTO) {
-        //使用mybatis的分页插件
-        QueryWrapper<ShopBuyerDO> queryWrapper = new QueryWrapper();
-        if (ObjectUtil.isNotNull(shopBuyerDTO)) {
-            queryWrapper.like(StringUtils.isNotBlank(shopBuyerDTO.getBuyerNick()), "buyer_nick", shopBuyerDTO.getBuyerNick())
-                    .eq(StringUtils.isNotBlank(shopBuyerDTO.getReceiverMobile()), "buyer_nick", shopBuyerDTO.getReceiverMobile())
-                    .like(StringUtils.isNotBlank(shopBuyerDTO.getReceiverName()), "receiver_name", shopBuyerDTO.getReceiverName());
-        }
-        List<ShopBuyerDO> shopBuyers = shopMapper.selectList(queryWrapper);
+        List<ShopBuyerDO> shopBuyers = shopService.queryShopBuyerByPage(shopBuyerDTO);
         return new PageVO<ShopBuyerDO>(shopBuyers.size(), 0, 0, shopBuyers);
     }
 
 
     @Override
     public ShopBuyerDO getMemberDetailByShopBuyerId(String shopBuyerId) {
-        ShopBuyerDO shopBuyer = shopMapper.selectOne(new QueryWrapper<ShopBuyerDO>().eq("shop_buyer_id", shopBuyerId));
+        ShopBuyerDO shopBuyer = shopService.getMemberDetailByShopBuyerId(shopBuyerId);
         return shopBuyer;
     }
 
@@ -75,8 +73,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberConsumptionLevelVO queryMemberConsumptionLevel(String sellerId) {
-        QueryWrapper<ShopBuyerDO> wrapper = new QueryWrapper<ShopBuyerDO>().eq("seller_id", sellerId);
-        List<ShopBuyerDO> shopBuyers = shopMapper.selectList(wrapper);
+
+        List<ShopBuyerDO> shopBuyers = shopService.selectListBySellerId(sellerId);
         //找出高级，中级,普通人群
         int seniorNumber = 0, intermediateNumber = 0, ordinaryNumber = 0;
         BigDecimal SeniorAmount = new BigDecimal("0");
@@ -159,10 +157,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public int getTodayUser(String sellerId) {
-        QueryWrapper<ShopBuyerDO> wrapper = new QueryWrapper<>();
-        String today = DateUtil.format(new Date(), "yyyy-MM-dd 00:00:00");
-        wrapper.eq("seller_id", sellerId).ge("create_time",today);
-        Integer integer = shopMapper.selectCount(wrapper);
+        Integer integer = shopService.selectCount(sellerId);
         return integer;
     }
 

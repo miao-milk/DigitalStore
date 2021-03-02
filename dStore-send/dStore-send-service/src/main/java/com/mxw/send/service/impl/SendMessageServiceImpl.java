@@ -31,6 +31,9 @@ public class SendMessageServiceImpl implements SendMessageService {
         this.sendMessageMapper.insert(messageDO);
         boolean send = sendMessageUtils.send(content, mobile, url, userName, "password");
         System.out.println(send);
+        Integer sellerId = messageDO.getSellerId();
+        //扣费
+        sendMessageMapper.updateUserFee(sellerId);
         return send;
     }
 
@@ -42,10 +45,11 @@ public class SendMessageServiceImpl implements SendMessageService {
     }
 
     @Override
-    public PageVO<MessageDO> queryAllMemberByParam(MessageDO messageDO) {
+    public PageVO<MessageDO> queryAllMemberByParam(MessageDO messageDO, String sellerId) {
         QueryWrapper<MessageDO> queryWrapper = new QueryWrapper();
         if (ObjectUtil.isNotNull(messageDO)) {
-            ((QueryWrapper)queryWrapper.like(StringUtils.isNotBlank(messageDO.getMobile()), "mobile", messageDO.getMobile())).like(StringUtils.isNotBlank(messageDO.getContent()), "content", messageDO.getContent());
+            ((QueryWrapper)queryWrapper.like(StringUtils.isNotBlank(messageDO.getMobile()), "mobile", messageDO.getMobile()))
+                    .like(StringUtils.isNotBlank(messageDO.getContent()), "content", messageDO.getContent()).eq("seller_id",sellerId);
         }
 
         List<MessageDO> messageDOS = this.sendMessageMapper.selectList(queryWrapper);

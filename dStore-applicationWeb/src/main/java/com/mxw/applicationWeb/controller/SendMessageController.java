@@ -47,7 +47,9 @@ public class SendMessageController {
     })
     public Result allMessageByParam(@RequestBody String params) {
         MessageDO messageDO = JSONObject.parseObject(params, MessageDO.class);
-        PageVO<MessageDO> messageDOS = sendMessageService.queryAllMemberByParam(messageDO);
+        UserDTO user = shiroUtils.getUser();
+        String sellerId=user.getSellerId();
+        PageVO<MessageDO> messageDOS = sendMessageService.queryAllMemberByParam(messageDO,sellerId);
 
         return Result.ok("分页条件查找信息成功").put("data", messageDOS.getItems())
                 .put("pageNo", messageDOS.getPage()).put("pageSize", messageDOS.getPageSize())
@@ -62,6 +64,9 @@ public class SendMessageController {
     })
     public Result sendMessage(@RequestBody String params) {
         MessageDO messageDO = JSONObject.parseObject(params, MessageDO.class);
+        UserDTO user = shiroUtils.getUser();
+        String sellerId=user.getSellerId();
+        messageDO.setSellerId(Integer.parseInt(sellerId));
         Boolean aBoolean = sendMessageService.sendMessage(messageDO);
 
       if (aBoolean){

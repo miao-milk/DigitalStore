@@ -84,10 +84,10 @@ public class TradeServiceImpl implements TradeService {
     public NewTradeUsersDTO getTodayUsers(String sellerId) {
         ArrayList<String> oldTimeList = new ArrayList<>();
         ArrayList<Integer> oldUserList = new ArrayList<>();
-        //先查询今日新增会员数
-        int todayUser = memberService.getTodayUser(sellerId);
-        oldTimeList.add(DateUtil.format(new Date(), "MM-dd"));
-        oldUserList.add(todayUser);
+//        //先查询今日新增会员数
+//        int todayUser = memberService.getTodayUser(sellerId);
+//        oldTimeList.add(DateUtil.format(new Date(), "MM-dd"));
+//        oldUserList.add(todayUser);
         //查询7天的数据
         QueryWrapper<TradeEverydayDO> tradeEverydayDOQueryWrapper = new QueryWrapper<>();
         //从每日销售记录表获取昨天记录
@@ -105,7 +105,7 @@ public class TradeServiceImpl implements TradeService {
         //获取昨日会员数
         TradeEverydayDO yesterdayDO = everyDayUtils.getyesterdaySales(sellerId);
         NewTradeUsersDTO newTradeUsersDTO = new NewTradeUsersDTO();
-        newTradeUsersDTO.setOrderUser(todayUser);
+        newTradeUsersDTO.setOrderUser(oldUserList.get(oldUserList.size()-1));
         newTradeUsersDTO.setReturnRate(yesterdayDO.getNewuser());
         newTradeUsersDTO.setOldTimeList(oldTimeList);
         newTradeUsersDTO.setOldUserList(oldUserList);

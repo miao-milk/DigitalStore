@@ -9,5 +9,5 @@ public interface SendMessageService {
 
     PageVO<MessageDO> getAllMessageRecord(String sellerId);
 
-    PageVO<MessageDO> queryAllMemberByParam(MessageDO messageDO);
+    PageVO<MessageDO> queryAllMemberByParam(MessageDO messageDO, String sellerId);
 }

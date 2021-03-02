@@ -16,7 +16,6 @@
         <module>dStore-analysis</module>
         <module>dStore-applicationWeb</module>
         <module>dStore-member</module>
-        <module>dStore-security</module>
         <module>dStore-user</module>
         <module>dStore-send</module>
         <module>dStore-job</module>
