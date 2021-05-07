@@ -127,7 +127,7 @@ public class BuyerService {
             tradeEverydayDO.setOrders(shopBuyerDOS.size());
             tradeEverydayDO.setNewuser(shopBuyerDOS.size());
             tradeEverydayDO.setDeal(shopBuyerDOS.size());
-            tradeEverydayDO.setCreateTime(new Date());
+            tradeEverydayDO.setCreateTime(new java.sql.Date(System.currentTimeMillis()));
             int num=0;
             if(shopBuyerDOS.size()!=0){
                 num=RandomUtil.randomInt(1,shopBuyerDOS.size()-1);

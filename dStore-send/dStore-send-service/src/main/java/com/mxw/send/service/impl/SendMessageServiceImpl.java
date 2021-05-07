@@ -25,11 +25,13 @@ public class SendMessageServiceImpl implements SendMessageService {
         SendMessageUtils sendMessageUtils = new SendMessageUtils();
         String url = "http://mt.yusms.com";
         String userName = "lxw";
-        String content = messageDO.getContent();
+        String content = "【接口测试】" + messageDO.getContent();
         String mobile = messageDO.getMobile();
         messageDO.setSendTime(new Date());
         this.sendMessageMapper.insert(messageDO);
         boolean send = sendMessageUtils.send(content, mobile, url, userName, "password");
+
+        //boolean send = sendMessageUtils.send(content, mobile, url, userName, "LXW@lxw1379");
         System.out.println(send);
         Integer sellerId = messageDO.getSellerId();
         //扣费
@@ -39,20 +41,20 @@ public class SendMessageServiceImpl implements SendMessageService {
 
     @Override
     public PageVO<MessageDO> getAllMessageRecord(String sellerId) {
-        QueryWrapper<MessageDO> wrapper = (QueryWrapper)(new QueryWrapper()).eq("seller_id", sellerId);
+        QueryWrapper<MessageDO> wrapper = (QueryWrapper) (new QueryWrapper()).eq("seller_id", sellerId);
         List<MessageDO> messageDOS = this.sendMessageMapper.selectList(wrapper);
-        return new PageVO((long)messageDOS.size(), 0L, 0L, messageDOS);
+        return new PageVO((long) messageDOS.size(), 0L, 0L, messageDOS);
     }
 
     @Override
     public PageVO<MessageDO> queryAllMemberByParam(MessageDO messageDO, String sellerId) {
         QueryWrapper<MessageDO> queryWrapper = new QueryWrapper();
         if (ObjectUtil.isNotNull(messageDO)) {
-            ((QueryWrapper)queryWrapper.like(StringUtils.isNotBlank(messageDO.getMobile()), "mobile", messageDO.getMobile()))
-                    .like(StringUtils.isNotBlank(messageDO.getContent()), "content", messageDO.getContent()).eq("seller_id",sellerId);
+            ((QueryWrapper) queryWrapper.like(StringUtils.isNotBlank(messageDO.getMobile()), "mobile", messageDO.getMobile()))
+                    .like(StringUtils.isNotBlank(messageDO.getContent()), "content", messageDO.getContent()).eq("seller_id", sellerId);
         }
 
         List<MessageDO> messageDOS = this.sendMessageMapper.selectList(queryWrapper);
-        return new PageVO((long)messageDOS.size(), 0L, 0L, messageDOS);
+        return new PageVO((long) messageDOS.size(), 0L, 0L, messageDOS);
     }
 }

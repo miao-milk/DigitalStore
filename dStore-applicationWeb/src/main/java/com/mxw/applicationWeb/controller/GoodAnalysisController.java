@@ -42,7 +42,8 @@ public class GoodAnalysisController {
     @GetMapping("/getCommoditySales")
     @ApiOperation("获取商品销售额数据")
     public Result getCommoditySales() {
-        String sellerId="2";
+        UserDTO user = shiroUtils.getUser();
+        String sellerId=user.getSellerId();
         ChartResponseVO chartResponseVO=goodAnalysisService.getCommoditySales(sellerId);
         return Result.ok().put("data",chartResponseVO);
     }

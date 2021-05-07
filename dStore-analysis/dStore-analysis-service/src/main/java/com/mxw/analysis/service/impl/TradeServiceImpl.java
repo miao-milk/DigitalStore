@@ -70,7 +70,7 @@ public class TradeServiceImpl implements TradeService {
         //遍历今日订单数，封装一日的销售数据
         //获取昨日的订单数
         TradeEverydayDO tradeEverydayDO = everyDayUtils.getyesterdaySales(sellerId);
-        Integer orders = tradeEverydayDO.getOrders();
+        Integer orders = tradeEverydayDO.getOrders()==null?0:tradeEverydayDO.getOrders();
 
 
         //封装数据
@@ -84,10 +84,6 @@ public class TradeServiceImpl implements TradeService {
     public NewTradeUsersDTO getTodayUsers(String sellerId) {
         ArrayList<String> oldTimeList = new ArrayList<>();
         ArrayList<Integer> oldUserList = new ArrayList<>();
-//        //先查询今日新增会员数
-//        int todayUser = memberService.getTodayUser(sellerId);
-//        oldTimeList.add(DateUtil.format(new Date(), "MM-dd"));
-//        oldUserList.add(todayUser);
         //查询7天的数据
         QueryWrapper<TradeEverydayDO> tradeEverydayDOQueryWrapper = new QueryWrapper<>();
         //从每日销售记录表获取昨天记录
@@ -96,7 +92,8 @@ public class TradeServiceImpl implements TradeService {
         calendar.add(Calendar.DATE, -6);
         Date yesterday = calendar.getTime();
         String oldTime = DateUtil.format(yesterday, "yyyy-MM-dd 00:00:00");
-        tradeEverydayDOQueryWrapper.ge("create_time", oldTime);
+        String nowTime = DateUtil.format(new Date(), "yyyy-MM-dd 00:00:00");
+        tradeEverydayDOQueryWrapper.ge("create_time", oldTime).le("create_time", nowTime);
         List<TradeEverydayDO> tradeEverydayDOS = tradeEverydayMapper.selectList(tradeEverydayDOQueryWrapper);
         for (TradeEverydayDO tradeEverydayDO : tradeEverydayDOS) {
             oldTimeList.add(DateUtil.format(tradeEverydayDO.getCreateTime(), "MM-dd"));
@@ -105,8 +102,8 @@ public class TradeServiceImpl implements TradeService {
         //获取昨日会员数
         TradeEverydayDO yesterdayDO = everyDayUtils.getyesterdaySales(sellerId);
         NewTradeUsersDTO newTradeUsersDTO = new NewTradeUsersDTO();
-        newTradeUsersDTO.setOrderUser(oldUserList.get(oldUserList.size()-1));
-        newTradeUsersDTO.setReturnRate(yesterdayDO.getNewuser());
+        newTradeUsersDTO.setOrderUser(oldUserList.size()==0?0:oldUserList.get(oldUserList.size()-1));
+        newTradeUsersDTO.setReturnRate(yesterdayDO.getNewuser()==null?0:yesterdayDO.getNewuser());
         newTradeUsersDTO.setOldTimeList(oldTimeList);
         newTradeUsersDTO.setOldUserList(oldUserList);
         return newTradeUsersDTO;

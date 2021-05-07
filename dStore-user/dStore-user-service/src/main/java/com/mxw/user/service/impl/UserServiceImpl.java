@@ -87,6 +87,15 @@ public class UserServiceImpl implements UserService {
         return userInfo;
     }
 
+    @Override
+    public void updateBanlane(String sellerId, Double num) {
+        UserInfoDO userInfoDO = userInfoMapper.selectById(sellerId);
+        Double fee = userInfoDO.getFee();
+        userInfoDO.setFee(fee+num);
+        int i = userInfoMapper.updateById(userInfoDO);
+        System.out.println(i);
+    }
+
     private boolean checkPassword(UserInfoDTO userInfoDTO, String sellerId) {
         //查询用户
         //查询用户

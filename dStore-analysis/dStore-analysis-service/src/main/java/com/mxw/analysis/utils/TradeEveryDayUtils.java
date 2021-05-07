@@ -40,12 +40,14 @@ public class TradeEveryDayUtils {
     public TradeEverydayDO getyesterdaySales(String sellerId) {
         //从每日销售记录表获取昨天记录
         Calendar calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
         calendar.setTime(new Date());
         calendar.add(Calendar.DATE, -1);
         Date yesterday = calendar.getTime();
         String yesterdayTime = DateUtil.format(yesterday, "yyyy-MM-dd 00:00:00");
+        String todayTime = DateUtil.format(today, "yyyy-MM-dd 00:00:00");
         QueryWrapper<TradeEverydayDO> wrapper = new QueryWrapper<>();
-        wrapper.eq("create_time", yesterdayTime);
+        wrapper.ge("create_time", yesterdayTime).le("create_time", todayTime);
         TradeEverydayDO yesterdayTradeDO = tradeEverydayMapper.selectOne(wrapper);
         return yesterdayTradeDO;
     }

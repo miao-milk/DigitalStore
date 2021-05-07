@@ -11,9 +11,11 @@ import com.mxw.applicationWeb.utils.ShiroUtils;
 import com.mxw.common.model.dto.PayDTO;
 import com.mxw.common.model.dto.UserDTO;
 import com.mxw.common.utils.Result;
+import com.mxw.user.api.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -35,6 +37,9 @@ public class PayController {
 
     @Autowired
     ShiroUtils shiroUtils;
+
+    @Reference
+    UserService userService;
 
 
     @GetMapping("/pay")
@@ -139,8 +144,11 @@ public class PayController {
             System.out.println("付款金额="+total_amount);
             System.out.println("充值短信条数="+total_message);
 
-            //支付成功，修复支付状态
-            //payService.updateById(Integer.valueOf(out_trade_no));
+            UserDTO user = shiroUtils.getUser();
+            String sellerId=user.getSellerId();
+            //支付成功，修复支付状态，修改余额条数
+            userService.updateBanlane(sellerId,Double.valueOf(total_message));
+
             return Result.ok().put("data","StrategyList");//跳转付款成功页面
         }else{
             return Result.ok().put("data","StrategyList");//跳转付款失败页面

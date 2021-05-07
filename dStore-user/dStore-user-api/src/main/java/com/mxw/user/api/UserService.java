@@ -24,4 +24,6 @@ public interface UserService {
     void saveUserInfo(UserInfoDTO userInfoDTO,String sellerId);
 
     UserInfoDTO getUserInfo(String sellerId);
+
+    void updateBanlane(String sellerId,Double num);
 }
